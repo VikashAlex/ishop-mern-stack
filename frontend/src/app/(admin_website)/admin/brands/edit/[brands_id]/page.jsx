@@ -54,7 +54,8 @@ function page() {
   useEffect(() => {
     const fetchData = async () => {
       const res = await getBrands(brands_id);
-      setBrand(res);
+      const data = await res.getBrand;
+      setBrand(data);
     };
     fetchData();
   }, []);

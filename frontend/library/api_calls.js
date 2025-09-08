@@ -9,16 +9,26 @@ const getCategory = async(id=null)=>{
     }
     const response =await Axiosinstance.get(API);
     const data = await response.data;
-    return data.getCategory
+    return data
 }
-const getProduct = async(id=null)=>{
+const getProduct = async(id=null,categorySlug=null,brandSlug=null,colorSlug=null)=>{
     let API = null
     if (id==null) {
         API = 'product/get';
     }else{
         API =  `product/get/${id}`;
     }
-    const response =await Axiosinstance.get(API);
+    const query = new URLSearchParams()
+    if (categorySlug) {
+        query.append("categorySlug",categorySlug)
+    }
+    if (brandSlug) {
+        query.append("brandSlug",brandSlug)
+    }
+    if (colorSlug) {
+        query.append("colorSlug",colorSlug)
+    }
+    const response =await Axiosinstance.get(`${API}?${query.toString()}`);
     const data = await response.data;
     return data.getProduct
 }
@@ -45,7 +55,7 @@ const getBrands = async(id=null)=>{
     }
     const res = await Axiosinstance(API);
     const data = await res.data;
-    return data.getBrand;
+    return data
 
 }
 export {getCategory,getColors,getBrands,getProduct}

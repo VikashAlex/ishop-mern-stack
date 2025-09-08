@@ -1,14 +1,17 @@
-import React from "react";
-import TopBanner from "../components/store/TopBanner";
-import PopularProduct from "../components/store/PopularProduct";
-import Products from "../components/store/Products";
+import { getProduct } from "../../../../library/api_calls";
+import AllProduct from "../components/store/AllProduct";
+import BestProduct from "../components/store/BestProduct";
 
-function StorePage() {
+async function StorePage({searchParams}) {
+  const {brand} = await searchParams ?? null;
+  const {color} = await searchParams ?? null;
+   const products = await getProduct(null,null,brand,color);
+   
+   
   return (
     <>
-      <TopBanner />
-      <PopularProduct />
-      <Products />
+      <BestProduct products={products} />
+      <AllProduct />
     </>
   );
 }

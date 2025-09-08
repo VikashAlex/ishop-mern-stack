@@ -1,5 +1,6 @@
 const categoryModel = require("../models/category.model");
 const categoryUniueName = require("../utility/helper")
+const productModel = require("../models/product.model");
 const fs = require('fs')
 
 const categoryController = {
@@ -11,6 +12,17 @@ const categoryController = {
         getCategory = await categoryModel.findById(id);
       } else {
         getCategory = await categoryModel.find();
+
+        const data = await Promise.all(
+          getCategory.map(async(cat)=>{
+            const productCount = await productModel.countDocuments({categoryId:cat._id});
+            return {
+              ...cat.toObject(),
+              productCount
+            }
+          })
+        )
+        return res.status(201).json({ msg: "Data Get Successfully...", data });
       }
       if (getCategory) {
         return res.status(201).json({ msg: "Data Get Successfully...", getCategory });

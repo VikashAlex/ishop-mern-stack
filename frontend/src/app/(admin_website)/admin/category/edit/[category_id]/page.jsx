@@ -10,7 +10,6 @@ import { getCategory } from "../../../../../../../library/api_calls";
 function page() {
   const { category_id } = useParams()
   const [category, setCategory] = useState({});
-  const [flag, setFlag] = useState(false);
   const router = useRouter();
   const nameRfe = useRef(null);
   const slugRfe = useRef(null);
@@ -52,7 +51,8 @@ function page() {
   useEffect(() => {
     const fetchData = async () => {
       const res = await getCategory(category_id);
-      setCategory(res);
+      const data = await res.getCategory;
+      setCategory(data);
     };
     fetchData();
   }, []);

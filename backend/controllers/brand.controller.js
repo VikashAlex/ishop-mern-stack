@@ -1,4 +1,5 @@
 const brandModel = require('../models/brand.model');
+const productModel = require("../models/product.model");
 const categoryUniueName = require('../utility/helper');
 const fs = require('fs')
 const brandController = {
@@ -9,6 +10,16 @@ const brandController = {
                 getBrand = await brandModel.findById(id)
             } else {
                 getBrand = await brandModel.find()
+                const data = await Promise.all(
+                          this.getBrand.map(async(prod)=>{
+                            const productCount = await productModel.countDocuments({BrandId:prod._id});
+                            return {
+                              ...prod.toObject(),
+                              productCount
+                            }
+                          })
+                        )
+                        return res.status(201).json({ msg: "Data Get Successfully...", data });
             }
             return res.status(201).json({ msg: "brand get successful...", success: true, getBrand })
         } catch (error) {

@@ -15,7 +15,8 @@ export default function CategoryPage() {
   useEffect(() => {
     const fetchData = async () => {
       const res = await getCategory();
-      setCategory(res);
+      const data = await res.data;
+      setCategory(data);
     };
     fetchData();
   }, [flag]);

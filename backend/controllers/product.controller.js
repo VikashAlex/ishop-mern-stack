@@ -1,3 +1,6 @@
+const categoryModel = require("../models/category.model");
+const brandModel = require("../models/brand.model");
+const colorModel = require("../models/color.model");
 const productModel = require("../models/product.model");
 const categoryUniueName = require("../utility/helper")
 const fs = require('fs')
@@ -11,12 +14,34 @@ const savefile = async (imageObj) => {
 const productController = {
   async getProduct(req, res) {
     const { id } = req.params;
+    const {categorySlug,brandSlug,colorSlug}=req.query;
+
     let getProduct = null
     try {
+      let filterquery = {};
+      if (categorySlug) {
+          const category = await categoryModel.findOne({slug:categorySlug});
+
+          if (category) {
+            filterquery.categoryId = category._id;
+          }
+      }
+      if (brandSlug) {
+          const brand = await brandModel.findOne({slug:brandSlug});
+          if (brand) {
+            filterquery.BrandId = brand._id;
+          }
+      }
+      if (colorSlug) {
+          const color = await colorModel.findOne({slug:colorSlug});
+          if (color) {
+            filterquery.colors = color._id;
+          }
+      }
       if (id) {
         getProduct = await productModel.findById(id).populate(["categoryId", "BrandId", "colors"]);
       } else {
-        getProduct = await productModel.find().populate(["categoryId", "BrandId", "colors"])
+        getProduct = await productModel.find(filterquery).populate(["categoryId", "BrandId", "colors"])
       }
       if (getProduct) {
         return res.status(201).json({ msg: "Data Get Successfully...", getProduct });

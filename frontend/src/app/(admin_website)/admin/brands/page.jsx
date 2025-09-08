@@ -15,7 +15,8 @@ export default function BrandsPage() {
   useEffect(() => {
     const fetchData = async () => {
       const res = await getBrands();
-      setBrands(res);
+      const data = await res.data;
+      setBrands(data);
     };
     fetchData();
   }, [flag]);

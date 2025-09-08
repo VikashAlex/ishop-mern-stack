@@ -1,4 +1,4 @@
-import Image from "next/image";
+
 import { FaHeart } from "react-icons/fa";
 import { IoIosCheckmarkCircle } from "react-icons/io";
 import { FcCancel } from "react-icons/fc";
@@ -7,11 +7,11 @@ function CardUi({ item }) {
   return (
     <div className="relative my-6 border-gray-200 border rounded-[7px]">
       <div className="absolute  px-3 top-3 left-0 w-full  flex items-center justify-between">
-        {item.diccount ? (
+        {item.discountPercentage ? (
           <div className="bg-[#1ABA1A] rounded-[7px] h-[41px] w-[73px] flex flex-col justify-center items-center text-white">
             <div>
               <p className="uppercase text-[10px]">save</p>
-              <h3 className="font-semibold text-[14px]">{item?.diccount}</h3>
+              <h3 className="font-semibold text-[14px]">{item?.discountPercentage}</h3>
             </div>
           </div>
         ) : (
@@ -23,28 +23,29 @@ function CardUi({ item }) {
       </div>
 
       <div className="h-[195px] border-gray-200 border-b   flex items-center justify-center overflow-hidden">
-        <Image
-          src={item.img}
+        <img
+          src={`${process.env.NEXT_PUBLIC_API_BASE_URL}images/product/${item.thumbnail}`}
           width={130}
           height={100}
-          alt={item.img}
+          alt={item.name}
           className=" object-cover object-center"
         />
       </div>
 
       <div className="  flex flex-col justify-between px-2 pb-4 ">
-        <div className="min-h-[100px]">
+        <div>
           <p className="text-[#666666] text-center my-2 font-semibold">
-            {item.count}
+            {item?.count}
           </p>
           <h3 className="font-bold text-[12px] mb-2 line-clamp-2">
             {item.name}
           </h3>
         </div>
+        
         <div className="flex items-center gap-x-2 mb-4">
-          <h3 className="text-[#F1352B] font-bold">{item.price}</h3>
+          <h3 className="text-[#F1352B] font-bold">{item.finalPrice}</h3>
           <h5 className="line-through font-semibold text-[#666666]">
-            {item.mrp}
+            {item.originalPrice}
           </h5>
         </div>
 
