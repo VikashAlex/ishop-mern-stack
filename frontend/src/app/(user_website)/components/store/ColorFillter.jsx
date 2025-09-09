@@ -10,7 +10,7 @@ function ColorFillter({Colors}) {
       useEffect(() => {
         const color = new URLSearchParams({ color: selclr });
         if (selclr) {
-          router.push(`/store?${color.toString()}`);
+          router.push(`?${color.toString()}`);
         }
       }, [selclr])
   return (

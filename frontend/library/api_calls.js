@@ -11,7 +11,7 @@ const getCategory = async(id=null)=>{
     const data = await response.data;
     return data
 }
-const getProduct = async(id=null,categorySlug=null,brandSlug=null,colorSlug=null)=>{
+const getProduct = async(id=null,categorySlug=null,brandSlug=null,colorSlug=null,min=null,max=null)=>{
     let API = null
     if (id==null) {
         API = 'product/get';
@@ -27,6 +27,12 @@ const getProduct = async(id=null,categorySlug=null,brandSlug=null,colorSlug=null
     }
     if (colorSlug) {
         query.append("colorSlug",colorSlug)
+    }
+     if (min) {
+        query.append("min",min)
+    }
+     if (max) {
+        query.append("max",max)
     }
     const response =await Axiosinstance.get(`${API}?${query.toString()}`);
     const data = await response.data;

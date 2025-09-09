@@ -43,25 +43,18 @@ function CardUi({ item }) {
         </div>
         
         <div className="flex items-center gap-x-2 mb-4">
-          <h3 className="text-[#F1352B] font-bold">{item.finalPrice}</h3>
+          <h3 className="text-[#F1352B] font-bold">₹ {item.finalPrice}</h3>
           <h5 className="line-through font-semibold text-[#666666]">
-            {item.originalPrice}
+            ₹ {item.originalPrice}
           </h5>
         </div>
 
         <div className="flex gap-x-2 items-center mb-4">
-          <h3
-            className={`${
-              item.shipping == "free shipping"
-                ? "text-[#1ABA1A]"
-                : "text-[#666666]"
-            } uppercase px-3 py-1 rounded-[7px] bg-[#e4e4e4] text-[10px] font-semibold`}
-          >
-            {item.shipping}
-          </h3>
-          <p className="text-[#F1352B] uppercase px-3 py-1 rounded-[7px] bg-[#e4e4e4] text-[10px] font-semibold">
-            {item?.gift}
-          </p>
+        {
+          item?.colors?.map((clr)=>{
+            return <div key={clr._id} style={{backgroundColor:clr.hexacode}} className="w-[20px] h-[20px] rounded-full shadow"></div>
+          })
+        }
         </div>
 
         <div className="text-[12px] capitalize flex gap-x-1  items-center font-bold">

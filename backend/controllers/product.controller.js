@@ -14,7 +14,7 @@ const savefile = async (imageObj) => {
 const productController = {
   async getProduct(req, res) {
     const { id } = req.params;
-    const {categorySlug,brandSlug,colorSlug}=req.query;
+    const {categorySlug,brandSlug,colorSlug,min,max}=req.query;
 
     let getProduct = null
     try {
@@ -37,6 +37,12 @@ const productController = {
           if (color) {
             filterquery.colors = color._id;
           }
+      }
+      if (min && max) {
+        filterquery.finalPrice = {
+          $gte:min,
+          $lte:max
+        }
       }
       if (id) {
         getProduct = await productModel.findById(id).populate(["categoryId", "BrandId", "colors"]);
