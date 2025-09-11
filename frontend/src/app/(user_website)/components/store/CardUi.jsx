@@ -2,8 +2,11 @@
 import { FaHeart } from "react-icons/fa";
 import { IoIosCheckmarkCircle } from "react-icons/io";
 import { FcCancel } from "react-icons/fc";
+import CartBtn from "../CartBtn";
 
 function CardUi({ item }) {
+  const {_id,finalPrice,originalPrice}=item;
+
   return (
     <div className="relative my-6 border-gray-200 border rounded-[7px]">
       <div className="absolute  px-3 top-3 left-0 w-full  flex items-center justify-between">
@@ -68,6 +71,10 @@ function CardUi({ item }) {
               <FcCancel fill="#F1352B" className="text-xl" /> Out of stock
             </>
           )}
+        </div>
+
+        <div className="my-2">
+          <CartBtn productId={_id} finalPrice={finalPrice} originalPrice={originalPrice}/>
         </div>
       </div>
     </div>

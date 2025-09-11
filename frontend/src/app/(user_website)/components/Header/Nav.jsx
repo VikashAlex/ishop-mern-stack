@@ -1,10 +1,12 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Logo from "./Logo";
 import Link from "next/link";
 import { CiHeart } from "react-icons/ci";
 import TopPart from "./TopPart";
 import { FaBars, FaTimes } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { lsCartItem } from "@/app/redux/features/cartSlice";
 
 const Links = [
   { path: "/", name: "Home" },
@@ -14,7 +16,16 @@ const Links = [
 ];
 
 function Nav() {
+  const cartitems = useSelector((state) => state.cart);
+  const dispatcher = useDispatch()
+  const { items, finalPrice_Total } = cartitems;
+
+  useEffect(() => {
+    dispatcher(lsCartItem())
+  }, [dispatcher])
+
   const [open, setOpen] = useState(false);
+
   return (
     <div className="p-4 bg-white flex flex-col gap-y-8 pb-6  relative z-50">
       <TopPart />
@@ -55,10 +66,10 @@ function Nav() {
           </div>
 
           <div className="flex gap-x-3 items-center">
-            <button className="w-7 h-7 rounded-full bg-[#EBEEF6]"></button>
+            <button className="w-7 h-7 rounded-full bg-[#EBEEF6] text-pink-500 font-bold"> {items.length || 0}</button>
             <div className="flex flex-col text-[12px] uppercase gap-y-0">
               <p>cart</p>
-              <h1 className="font-bold">$1,689.00</h1>
+              <h1 className="font-bold">${finalPrice_Total || 0}</h1>
             </div>
           </div>
         </div>
@@ -73,17 +84,15 @@ function Nav() {
 
       {/* Mobile Menu Overlay */}
       <div
-        className={`fixed inset-0 bg-black/40 transition-opacity duration-300 ${
-          open ? "opacity-100 visible" : "opacity-0 invisible"
-        }`}
+        className={`fixed inset-0 bg-black/40 transition-opacity duration-300 ${open ? "opacity-100 visible" : "opacity-0 invisible"
+          }`}
         onClick={() => setOpen(false)}
       ></div>
 
       {/* Mobile Sidebar Menu */}
       <div
-        className={`fixed top-0 left-0 h-full w-full max-w-sm bg-white shadow-lg transform transition-transform duration-300 ease-in-out z-50 p-6 flex flex-col gap-y-6 ${
-          open ? "translate-x-0" : "-translate-x-full"
-        }`}
+        className={`fixed top-0 left-0 h-full w-full max-w-sm bg-white shadow-lg transform transition-transform duration-300 ease-in-out z-50 p-6 flex flex-col gap-y-6 ${open ? "translate-x-0" : "-translate-x-full"
+          }`}
       >
         {/* Logo + Close Btn */}
         <div className="flex justify-between items-center mb-4">

@@ -1,10 +1,12 @@
-import React from 'react'
-import TopPart from './TopPart'
+
 import Nav from './Nav'
 import Search from './Search'
 import PathName from './PathName'
 
+
 function Header() {
+  
+
   return (
     <header>
         {/* <div className="container mx-auto"> */}
