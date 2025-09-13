@@ -20,21 +20,28 @@ export const cartSlice = createSlice({
             }
             state.originalPrice_Total += originalPrice
             state.finalPrice_Total += finalPrice
-            localStorage.setItem('cart',JSON.stringify(state))
+            localStorage.setItem('cart', JSON.stringify(state))
         },
-        lsCartItem:(state)=>{
+        lsCartItem: (state) => {
             const cart = JSON.parse(localStorage.getItem('cart'));
             if (cart) {
-                state.items=cart.items;
-                state.originalPrice_Total=cart.originalPrice_Total
-                state.finalPrice_Total=cart.finalPrice_Total
+                state.items = cart.items;
+                state.originalPrice_Total = cart.originalPrice_Total
+                state.finalPrice_Total = cart.finalPrice_Total
             }
-        }
+        },
+        removeTocart: (state, { payload }) => {
+            const { _id, finalPrice, originalPrice } = payload;
+            state.items = state.items.filter(item => item.productId !== _id);
+            state.originalPrice_Total -= originalPrice
+            state.finalPrice_Total -= finalPrice
+            localStorage.setItem('cart', JSON.stringify(state))
+        },
 
     },
 })
 
 
-export const { addTocart,lsCartItem } = cartSlice.actions
+export const { addTocart, lsCartItem, removeTocart } = cartSlice.actions
 
 export default cartSlice.reducer

@@ -7,12 +7,14 @@ import TopPart from "./TopPart";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { lsCartItem } from "@/app/redux/features/cartSlice";
+import { ShoppingCart } from "lucide-react";
 
 const Links = [
   { path: "/", name: "Home" },
   { path: "/pages", name: "Pages" },
-  { path: "/products", name: "Products" },
+  { path: "/store", name: "Store" },
   { path: "/contact", name: "Contact" },
+  { path: "/profile", name: "My Profile" },
 ];
 
 function Nav() {
@@ -33,11 +35,11 @@ function Nav() {
       {/* Navbar */}
       <nav className="flex justify-between items-center">
         {/* Left part */}
-        <div className="flex items-center gap-x-6">
+        <div className="flex flex-1  items-center gap-x-10 ">
           <Logo />
 
           {/* Desktop Links */}
-          <div className="hidden md:flex items-center text-base gap-x-6">
+          <div className="hidden md:flex   flex-1 justify-center  items-center text-base gap-x-6 ">
             {Links.map((link, index) => (
               <Link
                 href={link.path}
@@ -51,7 +53,7 @@ function Nav() {
         </div>
 
         {/* Right part (Desktop only) */}
-        <div className="hidden md:flex gap-x-6 items-center">
+        <div className="hidden md:flex gap-x-6 items-center ">
           <div className="flex gap-x-3">
             <button className="w-7 h-7 rounded-full bg-[#EBEEF6]"></button>
             <button className="w-7 h-7 rounded-full bg-[#EBEEF6] flex justify-center items-center">
@@ -65,13 +67,26 @@ function Nav() {
             <h1 className="font-bold">log in / Register</h1>
           </div>
 
-          <div className="flex gap-x-3 items-center">
-            <button className="w-7 h-7 rounded-full bg-[#EBEEF6] text-pink-500 font-bold"> {items.length || 0}</button>
-            <div className="flex flex-col text-[12px] uppercase gap-y-0">
-              <p>cart</p>
-              <h1 className="font-bold">${finalPrice_Total || 0}</h1>
+          <Link href={"/cart"}>
+            <div className="flex items-center gap-x-3 bg-white rounded-full px-4 py-2  hover:shadow-lg transition duration-300 cursor-pointer">
+              {/* Cart Icon + Badge */}
+              <div className="relative">
+                <ShoppingCart className="w-6 h-6 text-[#1ABA1A]" />
+                {items.length > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-[#1ABA1A] text-white text-[10px] font-bold rounded-full px-1.5 py-0.5 shadow">
+                    {items.length}
+                  </span>
+                )}
+              </div>
+
+              {/* Cart Info */}
+              <div className="flex flex-col text-[12px] uppercase leading-tight">
+                <span className="text-gray-500">Cart</span>
+                <span className="font-bold text-gray-800">${finalPrice_Total.toFixed() || 0}</span>
+              </div>
             </div>
-          </div>
+          </Link>
+
         </div>
 
         {/* Hamburger Menu (Mobile) */}

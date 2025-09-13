@@ -32,7 +32,7 @@ export default function ProductForm({ category, brands, color }) {
         const op = originalPriceRfe.current.value;
         const dp = discoutRfe.current.value;
         const fp = op - (op * dp) / 100;
-        finalPriceRfe.current.value = fp;
+        finalPriceRfe.current.value = fp.toFixed();
     }
     const formHandler = (e) => {
         e.preventDefault();
@@ -189,7 +189,7 @@ export default function ProductForm({ category, brands, color }) {
                         instanceId="category-select"
                         placeholder="-- Category Selector --"
                         options={
-                            category.map((category) => {
+                            category?.data?.map((category) => {
                                 return { value: category._id, label: category.name }
                             })
                         } />
@@ -203,7 +203,7 @@ export default function ProductForm({ category, brands, color }) {
                         instanceId="Brands-select"
                         placeholder="-- Brands Selector --"
                         options={
-                            brands.map((brand) => {
+                            brands?.data?.map((brand) => {
                                 return { value: brand._id, label: brand.name }
                             })
                         } />
