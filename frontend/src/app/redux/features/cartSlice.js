@@ -31,17 +31,30 @@ export const cartSlice = createSlice({
             }
         },
         removeTocart: (state, { payload }) => {
-            const { _id, finalPrice, originalPrice } = payload;
+            const { product, items } = payload
+            const findeqnty = items.find((item) => item.productId == product._id)
+            const { _id, finalPrice, originalPrice } = product;
             state.items = state.items.filter(item => item.productId !== _id);
-            state.originalPrice_Total -= originalPrice
-            state.finalPrice_Total -= finalPrice
+            state.originalPrice_Total -= originalPrice * findeqnty.qnty
+            state.finalPrice_Total -= finalPrice * findeqnty.qnty
+            console.log(state.items)
             localStorage.setItem('cart', JSON.stringify(state))
         },
-
+        addQnty: (state, { payload }) => {
+            const { product, type } = payload;
+            const exiting = state.items.find((item) => item.productId == product._id)
+            if (type == "+") {
+                exiting.qnty++
+            } else if (type == "-") {
+                exiting.qnty--
+            }
+            
+            localStorage.setItem('cart', JSON.stringify(state))
+        },
     },
 })
 
 
-export const { addTocart, lsCartItem, removeTocart } = cartSlice.actions
+export const { addTocart, lsCartItem, removeTocart, addQnty } = cartSlice.actions
 
 export default cartSlice.reducer

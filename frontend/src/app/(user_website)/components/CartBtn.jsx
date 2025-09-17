@@ -10,8 +10,8 @@ export default function CartBtn({ productId, originalPrice, finalPrice }) {
     return (
         <button
             onClick={() => dispatcher(addTocart({ productId, originalPrice, finalPrice }))}
-            className="flex items-center gap-2 text-sm px-5 cursor-pointer py-2 rounded-2xl bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold shadow-lg hover:scale-105 hover:shadow-xl transition-all duration-300">
-            <ShoppingCart className="w-5 h-5" />
+            className="flex items-center gap-2 text-[13px] px-[10px] cursor-pointer py-[5px] rounded-[8px] bg-gradient-to-r from-[#1ABA1A] to-[#43d443] text-white font-semibold shadow-lg hover:scale-105 hover:shadow-xl transition-all duration-300">
+            <ShoppingCart className="w-4 h-4" />
             Add to Cart
         </button>
     );

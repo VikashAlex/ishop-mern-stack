@@ -7,15 +7,17 @@ import { useEffect } from "react";
 export default function CheckoutPage() {
     const router = useRouter();
     const cart = useSelector((state) => state.cart);
-    const user = useSelector((state) => state.user.userDetails);
+    const user =  useSelector((state) => state.user.userDetails);
 
     useEffect(() => {
-        if (!user) router.push('user-login')
+        setTimeout(() => {
+            if (!user) router.push('user-login')
+        }, 2000);
     },[user])
 
     const handlePlaceOrder = () => {
         alert("Order Placed Successfully! 🎉");
-        router.push("/"); // order ke baad homepage ya orders page par bhej do
+        router.push("/"); 
     };
 
     return (

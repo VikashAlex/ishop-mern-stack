@@ -1,6 +1,6 @@
 'use client'
 
-import { removeTocart } from "@/app/redux/features/cartSlice";
+import { addQnty, removeTocart } from "@/app/redux/features/cartSlice";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -8,23 +8,20 @@ import { useDispatch, useSelector } from "react-redux";
 function CartItems({ product }) {
     const dispatcher = useDispatch()
     const router = useRouter();
-    const user = useSelector((state)=>state.user.userDetails)
-
-
+    const user = useSelector((state) => state.user.userDetails)
     const cart = useSelector((state) => state.cart);
+    const { items } = cart
     const cartprod = cart.items.map((item) => {
         return product.find((prod) => prod._id === item.productId)
     })
 
-    const clickHandel = ()=>{
+    const clickHandel = () => {
         if (user) {
             router.push('checkout')
-        }else{
+        } else {
             router.push('user-login')
         }
     }
-
-
 
     return (
         <div className="min-h-screen bg-gray-50 p-6 flex flex-col lg:flex-row gap-6">
@@ -49,19 +46,31 @@ function CartItems({ product }) {
                                         {product.name}
                                     </h2>
                                     <h4 className="line-clamp-1 max-w-[80%]">{product.shortDescription}</h4>
-                                    <p className="text-red-500 font-bold text-lg">${product.finalPrice}</p>
+                                    <p className="text-red-500 font-bold text-lg">${items.find((item) => item.productId === product._id)?.qnty*product.finalPrice}</p>
                                     <div className="flex items-center gap-2 mt-2">
-                                        <button className="px-2 py-1 border rounded">-</button>
-                                        <span>1</span>
-                                        <button className="px-2 py-1 border rounded">+</button>
+
+                                        
+                                        <button
+                                            disabled={items.find((item) => item.productId === product._id)?.qnty===1?true:false}
+                                            onClick={() => dispatcher(addQnty({ product, type: "-" }))}
+                                            className="px-2 py-1 border rounded">-</button>
+                                        <span>
+                                            {
+                                                items.find((item) => item.productId === product._id)?.qnty || 0
+                                            }
+                                        </span>
+                                        <button
+                                            disabled={items.find((item) => item.productId === product._id)?.qnty===5?true:false}
+                                            onClick={() => dispatcher(addQnty({ product, type: "+" }))}
+                                            className="px-2 py-1 border rounded">+</button>
                                     </div>
                                     <div className="mt-2 flex items-center gap-2 text-xs justify-between">
-                                        <span className={product.stock?"text-green-600":"bg-red-500"}>{product.stock?"In stock":"Out Stock"}</span>
-                                        <button onClick={()=>dispatcher(removeTocart(product))} className="py-1 px-4 text-[14px] cursor-pointer shadow-2xl rounded-2xl bg-blue-700 text-white">Remove</button>
+                                        <span className={product.stock ? "text-green-600" : "bg-red-500"}>{product.stock ? "In stock" : "Out Stock"}</span>
+                                        <button onClick={() => dispatcher(removeTocart({ product, items }))} className="py-1 px-4 text-[14px] cursor-pointer shadow-2xl rounded-2xl bg-blue-700 text-white">Remove</button>
                                     </div>
-                                    
+
                                 </div>
-                                
+
                             </div>
                         )
                     })
@@ -85,10 +94,10 @@ function CartItems({ product }) {
                     <span>Final Price:</span>
                     <span>${cart.finalPrice_Total.toFixed()}</span>
                 </div>
-                
-                <button 
-                onClick={clickHandel}
-                className="w-full mt-6 bg-teal-600 hover:bg-teal-700 text-white py-2 rounded-md">
+
+                <button
+                    onClick={clickHandel}
+                    className="w-full mt-6 bg-teal-600 hover:bg-teal-700 text-white py-2 rounded-md">
                     CHECKOUT
                 </button>
             </div>

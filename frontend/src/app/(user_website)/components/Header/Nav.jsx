@@ -8,6 +8,7 @@ import { FaBars, FaTimes } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { lsCartItem } from "@/app/redux/features/cartSlice";
 import { ShoppingCart } from "lucide-react";
+import { lsUserData } from "@/app/redux/features/userSlice";
 
 const Links = [
   { path: "/", name: "Home" },
@@ -24,6 +25,7 @@ function Nav() {
 
   useEffect(() => {
     dispatcher(lsCartItem())
+    dispatcher(lsUserData())
   }, [dispatcher])
 
   const [open, setOpen] = useState(false);
@@ -82,7 +84,7 @@ function Nav() {
               {/* Cart Info */}
               <div className="flex flex-col text-[12px] uppercase leading-tight">
                 <span className="text-gray-500">Cart</span>
-                <span className="font-bold text-gray-800">${finalPrice_Total.toFixed() || 0}</span>
+                <span className="font-bold text-gray-800">${finalPrice_Total.toFixed(2) || 0}</span>
               </div>
             </div>
           </Link>
