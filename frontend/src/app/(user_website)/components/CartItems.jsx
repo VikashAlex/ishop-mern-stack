@@ -46,7 +46,7 @@ function CartItems({ product }) {
                                         {product.name}
                                     </h2>
                                     <h4 className="line-clamp-1 max-w-[80%]">{product.shortDescription}</h4>
-                                    <p className="text-red-500 font-bold text-lg">${items.find((item) => item.productId === product._id)?.qnty*product.finalPrice}</p>
+                                    <p className="text-red-500 font-bold text-lg">${items.find((item) => item.productId === product._id)?.qnty*product.finalPrice.toFixed(2)}</p>
                                     <div className="flex items-center gap-2 mt-2">
 
                                         

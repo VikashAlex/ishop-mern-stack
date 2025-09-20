@@ -20,6 +20,7 @@ export default function page() {
     Axiosinstance.post("user/login", data).then((res) => {
         if (res.status === 200) {
           toast.success(res.data.msg)
+         
           dispatcher(addTouser({user:res.data.data.user,token:res.data.data.token}))
         }
       }).catch((error) => {

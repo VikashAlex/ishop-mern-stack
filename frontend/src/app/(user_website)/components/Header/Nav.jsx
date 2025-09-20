@@ -20,6 +20,8 @@ const Links = [
 
 function Nav() {
   const cartitems = useSelector((state) => state.cart);
+  const user = useSelector((state)=>state.user.userDetails)
+
   const dispatcher = useDispatch()
   const { items, finalPrice_Total } = cartitems;
 
@@ -28,6 +30,7 @@ function Nav() {
     dispatcher(lsUserData())
   }, [dispatcher])
 
+  
   const [open, setOpen] = useState(false);
 
   return (
@@ -66,7 +69,15 @@ function Nav() {
 
           <div className="flex flex-col text-[12px] uppercase gap-y-0">
             <p>welcome</p>
-            <h1 className="font-bold">log in / Register</h1>
+            {
+              user
+              ?
+              <h1 className="font-bold text-center">{user.name}</h1>
+              :
+              <Link href={'/user-login'}>
+              <h1 className="font-bold">log in / Register</h1>
+              </Link>
+            }
           </div>
 
           <Link href={"/cart"}>
