@@ -15,12 +15,17 @@ function CartItems({ product }) {
         return product.find((prod) => prod._id === item.productId)
     })
 
+
+
     const clickHandel = () => {
         if (user) {
             router.push('checkout')
         } else {
             router.push('user-login')
         }
+    }
+    const payloadSend = (flag,product)=>{
+        dispatcher(addQnty({product,flag}))
     }
 
     return (
@@ -46,27 +51,22 @@ function CartItems({ product }) {
                                         {product.name}
                                     </h2>
                                     <h4 className="line-clamp-1 max-w-[80%]">{product.shortDescription}</h4>
-                                    <p className="text-red-500 font-bold text-lg">${items.find((item) => item.productId === product._id)?.qnty*product.finalPrice.toFixed(2)}</p>
+                                    <p className="text-red-500 font-bold text-lg">${(items.find((item) => item.productId === product._id)?.qnty*product.finalPrice)}</p>
                                     <div className="flex items-center gap-2 mt-2">
-
-                                        
-                                        <button
-                                            disabled={items.find((item) => item.productId === product._id)?.qnty===1?true:false}
-                                            onClick={() => dispatcher(addQnty({ product, type: "-" }))}
-                                            className="px-2 py-1 border rounded">-</button>
+                                        <button 
+                                        disabled={items.find((item) => item.productId === product._id)?.qnty<=1 ? true :false}
+                                        onClick={()=>payloadSend("-",product)}
+                                        className="px-2 py-1 border rounded">-</button>
                                         <span>
-                                            {
-                                                items.find((item) => item.productId === product._id)?.qnty || 0
-                                            }
+                                            {items.find((item) => item.productId === product._id)?.qnty || 0}
                                         </span>
                                         <button
-                                            disabled={items.find((item) => item.productId === product._id)?.qnty===5?true:false}
-                                            onClick={() => dispatcher(addQnty({ product, type: "+" }))}
-                                            className="px-2 py-1 border rounded">+</button>
+                                        onClick={()=>payloadSend("+",product)}
+                                        className="px-2 py-1 border rounded">+</button>
                                     </div>
                                     <div className="mt-2 flex items-center gap-2 text-xs justify-between">
                                         <span className={product.stock ? "text-green-600" : "bg-red-500"}>{product.stock ? "In stock" : "Out Stock"}</span>
-                                        <button onClick={() => dispatcher(removeTocart({ product, items }))} className="py-1 px-4 text-[14px] cursor-pointer shadow-2xl rounded-2xl bg-blue-700 text-white">Remove</button>
+                                        <button onClick={() => dispatcher(removeTocart({ product }))} className="py-1 px-4 text-[14px] cursor-pointer shadow-2xl rounded-2xl bg-blue-700 text-white">Remove</button>
                                     </div>
 
                                 </div>
@@ -87,12 +87,12 @@ function CartItems({ product }) {
                     </div>
                     <div className="flex justify-between">
                         <span>Saving :</span>
-                        <span className="font-medium">${(cart.originalPrice_Total - cart.finalPrice_Total).toFixed()}</span>
+                        <span className="font-medium">${cart.originalPrice_Total - cart.finalPrice_Total}</span>
                     </div>
                 </div>
                 <div className="flex justify-between font-bold text-lg mt-4 border-t pt-4">
                     <span>Final Price:</span>
-                    <span>${cart.finalPrice_Total.toFixed()}</span>
+                    <span>${cart.finalPrice_Total}</span>
                 </div>
 
                 <button

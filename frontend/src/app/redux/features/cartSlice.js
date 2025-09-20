@@ -31,25 +31,31 @@ export const cartSlice = createSlice({
             }
         },
         removeTocart: (state, { payload }) => {
-            const { product, items } = payload
-            const findeqnty = items.find((item) => item.productId == product._id)
+            const { product } = payload
             const { _id, finalPrice, originalPrice } = product;
-            state.items = state.items.filter(item => item.productId !== _id);
+            const findeqnty = state.items.find((item) => item.productId == product._id)
             state.originalPrice_Total -= originalPrice * findeqnty.qnty
-            state.finalPrice_Total -= finalPrice * findeqnty.qnty
-            console.log(state.items)
+            state.finalPrice_Total -= finalPrice* findeqnty.qnty
+            state.items = state.items.filter(item => item.productId !== _id);
             localStorage.setItem('cart', JSON.stringify(state))
         },
         addQnty: (state, { payload }) => {
-            const { product, type } = payload;
-            const exiting = state.items.find((item) => item.productId == product._id)
-            if (type == "+") {
-                exiting.qnty++
-            } else if (type == "-") {
-                exiting.qnty--
+            const { product, flag } = payload
+            const { originalPrice, finalPrice,_id } = product
+            const exsiting = state.items.find((item) => item.productId == _id);
+           
+            if (flag == "+") {
+                exsiting.qnty++
+                state.originalPrice_Total += originalPrice
+                state.finalPrice_Total += finalPrice
+            } else if (flag == "-") {
+                exsiting.qnty--
+                state.originalPrice_Total -=  originalPrice
+                state.finalPrice_Total -= finalPrice
             }
-            
+
             localStorage.setItem('cart', JSON.stringify(state))
+
         },
     },
 })

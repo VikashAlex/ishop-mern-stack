@@ -95,7 +95,7 @@ function Nav() {
               {/* Cart Info */}
               <div className="flex flex-col text-[12px] uppercase leading-tight">
                 <span className="text-gray-500">Cart</span>
-                <span className="font-bold text-gray-800">${finalPrice_Total.toFixed(2) || 0}</span>
+                <span className="font-bold text-gray-800">${finalPrice_Total || 0}</span>
               </div>
             </div>
           </Link>
