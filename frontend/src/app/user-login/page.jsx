@@ -1,59 +1,83 @@
 'use client'
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Axiosinstance } from "../utils/helper";
 import { useDispatch } from "react-redux";
 import { addTouser } from "../redux/features/userSlice";
-import { ToastContainer , toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 
 export default function page() {
   const dispatcher = useDispatch()
+  const [value, setValue] = useState(null);
   const router = useRouter();
   const [isLogin, setIsLogin] = useState(true);
 
+  useEffect(() => {
+    const cart = JSON.parse(localStorage.getItem('cart'));
+    setValue(cart);
+  }, [])
+  
   const loginHandel = (e) => {
     e.preventDefault();
     const email = e.target.email.value;
     const password = e.target.password.value;
     const data = { email, password };
-    Axiosinstance.post("user/login", data).then((res) => {
-        if (res.status === 200) {
-          toast.success(res.data.msg)
-         
-          dispatcher(addTouser({user:res.data.data.user,token:res.data.data.token}))
+    Axiosinstance.post("user/login", data).then(async (res) => {
+      if (res.status === 200) {
+        toast.success(res.data.msg)
+        dispatcher(addTouser({ user: res.data.data.user, token: res.data.data.token }))
+      }
+      const data = {
+        userId: res.data.data.user._id,
+        cart: value?.items || null,
+      }
+      const updatecart = await Axiosinstance.post('cart/snyc', data)
+      let finalPrice_Total = 0
+      let originalPrice_Total =0
+      const items =  updatecart.data.cart?.map((prod)=>{
+          
+        finalPrice_Total += prod.product_id.finalPrice
+        originalPrice_Total += prod.product_id.originalPrice
+        return {
+          productId:prod.product_id._id,
+          qnty:prod.qnty
         }
-      }).catch((error) => {
-        console.log("Login error:");
-        if (error.response) {
-          toast.warning(error.response.data.msg)
-        } else {
-          console.log(error.message);
-        }
-      });
+
+      })
+      localStorage.setItem('cart',JSON.stringify({items,finalPrice_Total,originalPrice_Total}))
+
+    }).catch((error) => {
+      console.log("Login error:");
+      if (error.response) {
+        toast.warning(error.response.data.msg)
+      } else {
+        console.log(error.message);
+      }
+    });
   };
 
-   const signupHandel = (e) => {
+  const signupHandel = (e) => {
     e.preventDefault();
     const name = e.target.name.value;
     const email = e.target.email.value;
     const password = e.target.password.value;
-    const data = { name ,email, password };
+    const data = { name, email, password };
     Axiosinstance.post("user/create", data).then((res) => {
-        if (res.status === 201) {
-          toast.success(res.data.msg)
-          setTimeout(() => {
-            setIsLogin(true)
-          }, 5000);
-        }
-      }).catch((error) => {
-        console.log("Login error:");
-        if (error.response) {
-          toast.warning(error.response.data.msg)
-        } else {
-          console.log(error.message);
-        }
-      });
+      if (res.status === 201) {
+        toast.success(res.data.msg)
+        setTimeout(() => {
+          setIsLogin(true)
+        }, 5000);
+      }
+    }).catch((error) => {
+      console.log("Login error:");
+      if (error.response) {
+        toast.warning(error.response.data.msg)
+      } else {
+        console.log(error.message);
+      }
+    });
   };
 
 
@@ -72,9 +96,9 @@ export default function page() {
         {/* Header */}
         <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
           {isLogin ? "Welcome Back 👋" : "Create Account 🚀"}
-          
+
         </h2>
-       <ToastContainer/>
+        <ToastContainer />
 
         {/* Toggle Tabs */}
         <div className="flex mb-6 bg-gray-100 rounded-lg overflow-hidden">
