@@ -1,8 +1,10 @@
 'use client'
 
 import { addQnty, removeTocart } from "@/app/redux/features/cartSlice";
+import { Axiosinstance } from "@/app/utils/helper";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 
 function CartItems({ product }) {
@@ -24,10 +26,32 @@ function CartItems({ product }) {
             router.push('user-login')
         }
     }
-    const payloadSend = (flag,product)=>{
-        dispatcher(addQnty({product,flag}))
+    const payloadSend = (flag, product) => {
+        if (user != null) {
+            Axiosinstance.patch(`/cart/qnty-manage/${user._id}/${product._id}/${flag}`).then((res) => {
+                if (res.status == 200) {
+                    toast.success(res.data.msg)
+                }
+            }).catch((error) => {
+                console.log(error)
+            })
+        }
+        dispatcher(addQnty({ product, flag }))
     }
 
+    const removehandel = (product) => {
+        if (user != null) {
+            Axiosinstance.delete(`/cart/remove-to-cart/${user._id}/${product._id}`).then((res) => {
+                if (res.status == 200) {
+                    toast.success(res.data.msg)
+                }
+            }).catch((error) => {
+                console.log(error)
+            })
+        }
+        dispatcher(removeTocart({ product }))
+
+    }
     return (
         <div className="min-h-screen bg-gray-50 p-6 flex flex-col lg:flex-row gap-6">
             {/* Left Side - Cart Items */}
@@ -51,22 +75,22 @@ function CartItems({ product }) {
                                         {product.name}
                                     </h2>
                                     <h4 className="line-clamp-1 max-w-[80%]">{product.shortDescription}</h4>
-                                    <p className="text-red-500 font-bold text-lg">${(items.find((item) => item.productId === product._id)?.qnty*product.finalPrice)}</p>
+                                    <p className="text-red-500 font-bold text-lg">${(items.find((item) => item.productId === product._id)?.qnty * product.finalPrice)}</p>
                                     <div className="flex items-center gap-2 mt-2">
-                                        <button 
-                                        disabled={items.find((item) => item.productId === product._id)?.qnty<=1 ? true :false}
-                                        onClick={()=>payloadSend("-",product)}
-                                        className="px-2 py-1 border rounded">-</button>
+                                        <button
+                                            disabled={items.find((item) => item.productId === product._id)?.qnty <= 1 ? true : false}
+                                            onClick={() => payloadSend("-", product)}
+                                            className="px-2 py-1 border rounded">-</button>
                                         <span>
                                             {items.find((item) => item.productId === product._id)?.qnty || 0}
                                         </span>
                                         <button
-                                        onClick={()=>payloadSend("+",product)}
-                                        className="px-2 py-1 border rounded">+</button>
+                                            onClick={() => payloadSend("+", product)}
+                                            className="px-2 py-1 border rounded">+</button>
                                     </div>
                                     <div className="mt-2 flex items-center gap-2 text-xs justify-between">
                                         <span className={product.stock ? "text-green-600" : "bg-red-500"}>{product.stock ? "In stock" : "Out Stock"}</span>
-                                        <button onClick={() => dispatcher(removeTocart({ product }))} className="py-1 px-4 text-[14px] cursor-pointer shadow-2xl rounded-2xl bg-blue-700 text-white">Remove</button>
+                                        <button onClick={() => removehandel(product)} className="py-1 px-4 text-[14px] cursor-pointer shadow-2xl rounded-2xl bg-blue-700 text-white">Remove</button>
                                     </div>
 
                                 </div>

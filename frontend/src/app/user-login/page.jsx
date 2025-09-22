@@ -37,8 +37,8 @@ export default function page() {
       let originalPrice_Total =0
       const items =  updatecart.data.cart?.map((prod)=>{
           
-        finalPrice_Total += prod.product_id.finalPrice
-        originalPrice_Total += prod.product_id.originalPrice
+        finalPrice_Total += Number(prod.product_id.finalPrice*prod.qnty)
+        originalPrice_Total += Number(prod.product_id.originalPrice*prod.qnty)
         return {
           productId:prod.product_id._id,
           qnty:prod.qnty

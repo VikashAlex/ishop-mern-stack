@@ -79,7 +79,6 @@ const userController = {
         }
     },
     async address(req, res) {
-
         try {
             const id = req.params.userId;
             const newAddress = req.body;

@@ -4,6 +4,7 @@ import { addTocart } from "@/app/redux/features/cartSlice";
 import { Axiosinstance } from "@/app/utils/helper";
 import { ShoppingCart } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 
 export default function CartBtn({ productId, originalPrice, finalPrice }) {
@@ -12,17 +13,19 @@ export default function CartBtn({ productId, originalPrice, finalPrice }) {
 
     const addToCart = () => {
         if (user!=null) {
-            console.log(user)
             Axiosinstance.post('/cart/add-to-cart',{
                 productId,
-                userId:user?.userId
+                userId:user?._id
             }).then((res)=>{
-                console.log(res)
+                if(res.status==200){
+                    toast.success(res.data.msg)
+                }
             }).catch((error)=>{
                     console.log(error)
+                    toast.info(error.response.data.msg)
+               
             })
         }
-
           dispatcher(addTocart({ productId, originalPrice, finalPrice }))
           
     }
