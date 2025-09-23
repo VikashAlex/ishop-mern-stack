@@ -16,8 +16,17 @@ const getCokies = (name)=>{
     if (parts.length===2) return parts.pop().split(';').shift();
     return null;
 }
+
+function formatCurrencyINR(amount) {
+  return new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: "INR",
+    minimumFractionDigits: 0,
+  }).format(amount);
+}
+
 const Axiosinstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL
 });
 
-export {Axiosinstance,getCokies}
+export {Axiosinstance,getCokies,formatCurrencyINR}

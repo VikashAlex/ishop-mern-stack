@@ -10,6 +10,7 @@ const productRoutes = require('./routes/product.route');
 const adminRoutes = require('./routes/admin.routes');
 const userRoutes = require('./routes/user.routes');
 const cartRoutes = require('./routes/cart.routes');
+const orderRoutes = require('./routes/order.routes');
 const server = express();
 mongoose.set('strictQuery', true);
 require('dotenv').config();
@@ -23,6 +24,8 @@ server.use('/product', productRoutes)
 server.use('/admin', adminRoutes)
 server.use('/user', userRoutes)
 server.use('/cart', cartRoutes)
+server.use('/cart', cartRoutes)
+server.use('/order', orderRoutes)
 
 server.use(express.static('./public'));
 

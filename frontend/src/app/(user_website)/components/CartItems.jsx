@@ -1,7 +1,7 @@
 'use client'
 
 import { addQnty, removeTocart } from "@/app/redux/features/cartSlice";
-import { Axiosinstance } from "@/app/utils/helper";
+import { Axiosinstance, formatCurrencyINR } from "@/app/utils/helper";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
@@ -50,6 +50,7 @@ function CartItems({ product }) {
             })
         }
         dispatcher(removeTocart({ product }))
+        window.scrollTo({ top: 0, behavior: "smooth" });
 
     }
     return (
@@ -75,7 +76,7 @@ function CartItems({ product }) {
                                         {product.name}
                                     </h2>
                                     <h4 className="line-clamp-1 max-w-[80%]">{product.shortDescription}</h4>
-                                    <p className="text-red-500 font-bold text-lg">${(items.find((item) => item.productId === product._id)?.qnty * product.finalPrice)}</p>
+                                    <p className="text-red-500 font-bold text-lg">{formatCurrencyINR((items.find((item) => item.productId === product._id)?.qnty * product.finalPrice))}</p>
                                     <div className="flex items-center gap-2 mt-2">
                                         <button
                                             disabled={items.find((item) => item.productId === product._id)?.qnty <= 1 ? true : false}
@@ -102,26 +103,26 @@ function CartItems({ product }) {
             </div>
 
             {/* Right Side - Order Summary */}
-            <div className="w-full lg:w-80 bg-white rounded-lg shadow-md p-6 h-fit">
+            <div className="w-full lg:w-90 bg-white rounded-lg shadow-md p-6 h-fit">
                 <h2 className="text-lg font-semibold mb-4">Order Summary</h2>
                 <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
                         <span>Original Price:</span>
-                        <span className="font-medium">${cart.originalPrice_Total}</span>
+                        <span className="font-medium">${formatCurrencyINR(cart?.originalPrice_Total || 0)}</span>
                     </div>
                     <div className="flex justify-between">
                         <span>Saving :</span>
-                        <span className="font-medium">${cart.originalPrice_Total - cart.finalPrice_Total}</span>
+                        <span className="font-medium text-[#1ABA1A]">${formatCurrencyINR(cart?.originalPrice_Total - cart.finalPrice_Total || 0)}</span>
                     </div>
                 </div>
                 <div className="flex justify-between font-bold text-lg mt-4 border-t pt-4">
                     <span>Final Price:</span>
-                    <span>${cart.finalPrice_Total}</span>
+                    <span>${formatCurrencyINR(cart?.finalPrice_Total || 0)}</span>
                 </div>
 
                 <button
                     onClick={clickHandel}
-                    className="w-full mt-6 bg-teal-600 hover:bg-teal-700 text-white py-2 rounded-md">
+                    className="w-full cursor-pointer mt-6 bg-teal-600 hover:bg-teal-700 text-white py-2 rounded-md">
                     CHECKOUT
                 </button>
             </div>

@@ -27,7 +27,7 @@ export default function CartBtn({ productId, originalPrice, finalPrice }) {
             })
         }
           dispatcher(addTocart({ productId, originalPrice, finalPrice }))
-          
+          window.scrollTo({ top: 0, behavior: "smooth" });
     }
     return (
         <button
