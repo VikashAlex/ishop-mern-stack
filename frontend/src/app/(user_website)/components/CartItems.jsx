@@ -23,7 +23,7 @@ function CartItems({ product }) {
         if (user) {
             router.push('checkout')
         } else {
-            router.push('user-login')
+            router.push('user-login?rfe=/checkout')
         }
     }
     const payloadSend = (flag, product) => {

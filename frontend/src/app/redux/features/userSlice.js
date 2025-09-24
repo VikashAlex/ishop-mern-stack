@@ -15,20 +15,26 @@ export const userSlice = createSlice({
             state.userDetails = user;
             state.token = token;
             state.atLogin = new Date().toString();
-            localStorage.setItem('user',JSON.stringify(state))
+            localStorage.setItem('user', JSON.stringify(state))
         },
-         lsUserData: (state) => {
-                    const user = JSON.parse(localStorage.getItem('user'));
-                    if (user) {
-                        state.userDetails = user.userDetails;
-                        state.token = user.token
-                        state.atLogin = user.atLogin
-                    }
-                },
+        lsUserData: (state) => {
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (user) {
+                state.userDetails = user.userDetails;
+                state.token = user.token
+                state.atLogin = user.atLogin
+            }
+        },
+        signOut: (state) => {
+            state.userDetails = null
+            state.token = null
+            state.atLogin = null
+            localStorage.removeItem('user')
+        }
     },
 })
 
 
-export const { addTouser,lsUserData } = userSlice.actions
+export const { addTouser, lsUserData,signOut } = userSlice.actions
 
 export default userSlice.reducer

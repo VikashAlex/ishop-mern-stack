@@ -1,6 +1,7 @@
 const userModel = require('../models/user.model');
 var jwt = require('jsonwebtoken');
 const Cryptr = require('cryptr');
+const { findById } = require('../models/category.model');
 require('dotenv').config();
 const cryptr = new Cryptr(process.env.Crtyper_Key);
 const userController = {
@@ -87,19 +88,18 @@ const userController = {
                 return res.status(409).json({ msg: "Maximum limit reached ." });
             }
             const updatedUser = await userModel.findByIdAndUpdate(
-
                 id,
                 { $push: { shipping_address: newAddress } },
-
             );
 
             if (!updatedUser) {
                 return res.status(404).json({ msg: "User not found" });
             }
-
-
+            await updatedUser.save()
+            
+            const Userdata = await userModel.findById(id)
             const data = {
-                ...updatedUser.toJSON(),
+                ...Userdata.toJSON(),
                 password: null,
 
             }

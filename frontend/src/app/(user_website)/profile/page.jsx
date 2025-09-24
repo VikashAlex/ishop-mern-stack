@@ -1,24 +1,26 @@
 'use client'
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
 import { FaUserLock } from "react-icons/fa"
 import { Axiosinstance } from "@/app/utils/helper";
 import { toast } from "react-toastify";
-import { addTouser } from "@/app/redux/features/userSlice";
+import { addTouser, signOut } from "@/app/redux/features/userSlice";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { emptyCart } from "@/app/redux/features/cartSlice";
+
 
 
 
 function Page() {
   const router = useRouter()
-  const [address, setAddress] = useState({})
   const [toggle, setToggle] = useState('account');
   const [add, setAdd] = useState(false)
   const dispatcher = useDispatch()
-  const user = useSelector((state) => state.user.userDetails)
+  const user = useSelector((state) => state.user)
+
 
   const Buttons = ({ tab, flag }) => {
     return (
@@ -32,15 +34,6 @@ function Page() {
     );
   };
 
-  useEffect(() => {
-    const getuser = async () => {
-      const res = await Axiosinstance.get(`/user/get/${user?._id}`)
-      const data = await res.data.data.user
-      setAddress(data)
-    }
-    getuser()
-  }, [user])
-
   const addresshandler = (e) => {
     e.preventDefault();
     const data = {
@@ -52,15 +45,16 @@ function Page() {
       country: e.target.country.value,
       zip: e.target.zip.value,
     }
-    if (!user) {
+    if (!user?.userDetails) {
       setTimeout(() => {
         router.push('/user-login')
       }, 3000);
       return toast.error("Please Login Now...")
     }
-    Axiosinstance.post(`user/address/${user?._id}`, data).then((res) => {
+    Axiosinstance.post(`user/address/${user?.userDetails?._id}`, data).then((res) => {
       if (res.status == 200) {
-        const current = JSON.parse(localStorage.getItem('user'))
+        const current = user || null
+        console.log(res.data.user, "res")
         dispatcher(addTouser({ user: res.data.user, token: current.token, atLogin: current.atLogin }))
         setAdd(false)
         toast.success(res.data.msg)
@@ -76,9 +70,9 @@ function Page() {
   }
 
   const addressDelete = (index) => {
-    Axiosinstance.delete(`user/add_delete/${index}/${user._id}`).then((res) => {
+    Axiosinstance.delete(`user/add_delete/${index}/${user?.userDetails?._id}`).then((res) => {
       if (res.status == 200) {
-        const current = JSON.parse(localStorage.getItem('user'))
+        const current = user || null
         dispatcher(addTouser({ user: res.data.user, token: current.token, atLogin: current.atLogin }))
         toast.success(res.data.msg)
       }
@@ -98,7 +92,7 @@ function Page() {
       curr_pass,
       new_pass
     }
-    Axiosinstance.patch(`/user/password/${user._id}`, data).then((res) => {
+    Axiosinstance.patch(`/user/password/${user?.userDetails?._id}`, data).then((res) => {
       if (res.status == 200) {
         toast.success(res.data.msg)
         e.target.currentpass.value = ""
@@ -113,6 +107,11 @@ function Page() {
         toast.error(error.response.data.msg)
       }
     })
+  }
+  const longout = () => {
+    dispatcher(emptyCart())
+    dispatcher(signOut())
+    toast.success("Sign out Successful...");
   }
 
 
@@ -137,15 +136,15 @@ function Page() {
           </div>
 
           {
-            user ?
+            user?.userDetails ?
               <>
-                <h2 className="text-xl font-semibold text-gray-800">{user?.name || 'user no found'}</h2>
-                <p className="text-sm text-gray-500 mb-6">{user?.email || 'email not found.'}</p>
+                <h2 className="text-xl font-semibold text-gray-800">{user?.userDetails?.name || 'user no found'}</h2>
+                <p className="text-sm text-gray-500 mb-6">{user?.userDetails?.email || 'email not found.'}</p>
               </>
               :
-                <h2 className="text-xl font-bold text-gray-800 mb-3">
-                  Login Required
-                </h2>
+              <h2 className="text-xl font-bold text-gray-800 mb-3">
+                Login Required
+              </h2>
           }
 
 
@@ -170,7 +169,7 @@ function Page() {
                 transition={{ duration: 0.3 }}
               >
                 {
-                  user ?
+                  user?.userDetails ?
                     <div>
                       <h2 className="text-2xl font-semibold mb-6">Account Info</h2>
                       <form className="space-y-5">
@@ -182,7 +181,7 @@ function Page() {
                             <input
                               type="text"
                               placeholder="Vikash"
-                              defaultValue={user?.name.split(" ")[0] || "frist name"}
+                              defaultValue={user?.userDetails?.name.split(" ")[0] || "frist name"}
                               readOnly
                               className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500"
                             />
@@ -194,7 +193,7 @@ function Page() {
                             <input
                               type="text"
                               readOnly
-                              defaultValue={user?.name.split(" ")[1] || "last name"}
+                              defaultValue={user?.userDetails?.name.split(" ")[1] || "last name"}
                               placeholder="Kumar"
                               className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500"
                             />
@@ -206,19 +205,22 @@ function Page() {
                           </label>
                           <input
                             type="email"
-                            defaultValue={user?.email || "email not found.."}
+                            defaultValue={user?.userDetails?.email || "email not found.."}
                             placeholder="vikash123@gmail.com"
                             className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500"
                           />
                         </div>
 
-                        <button
-                          type="button"
-                          className="px-6 py-2 bg-teal-500 text-white font-medium rounded-md hover:bg-teal-600 transition"
-                        >
-                          SAVE
-                        </button>
+
                       </form>
+                      <div className="flex justify-end my-2">
+                        <button
+                          onClick={longout}
+                          className="rounded-md px-3.5 py-2 m-1 overflow-hidden relative group cursor-pointer border-2 font-medium border-teal-500 ">
+                          <span className="absolute w-64 h-0 transition-all duration-300 origin-center rotate-45 -translate-x-20 bg-teal-500 top-1/2 group-hover:h-64 group-hover:-translate-y-32 ease"></span>
+                          <span className="relative text-teal-500 transition duration-300 group-hover:text-white ease">Sign out</span>
+                        </button>
+                      </div>
                     </div>
                     :
                     <UserLoginUi />
@@ -236,7 +238,7 @@ function Page() {
                 transition={{ duration: 0.3 }}
               >
                 {
-                  user ?
+                  user?.userDetails ?
                     <div>
                       <h2 className="text-2xl font-semibold mb-6">My Orders</h2>
                       <div className="space-y-4">
@@ -274,9 +276,7 @@ function Page() {
               >
 
                 {
-                  user ?
-
-
+                  user?.userDetails ?
                     <div className=" relative">
                       <div className="bg-white ">
                         <div className="flex items-center justify-between mb-4">
@@ -296,7 +296,7 @@ function Page() {
                         {/* Addresses list (static - no logic) */}
                         <div className="space-y-4">
 
-                          {address?.shipping_address?.map((item, index) => {
+                          {user?.userDetails?.shipping_address?.map((item, index) => {
                             return (
                               <div key={index + 1} className="border rounded-xl p-4 flex items-start gap-4 opacity-90">
                                 <div className="flex-shrink-0">
@@ -309,7 +309,7 @@ function Page() {
                                   <div className="flex items-center justify-between">
                                     <div>
                                       <h3 className="text-sm font-semibold">Home</h3>
-                                      <p className="text-xs text-gray-500">{user.name} • {item.contact} </p>
+                                      <p className="text-xs text-gray-500">{user?.userDetails?.name} • {item.contact} </p>
                                     </div>
                                     <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">Default</span>
                                   </div>
@@ -500,7 +500,7 @@ function Page() {
                 transition={{ duration: 0.3 }}
               >
                 {
-                  user ?
+                  user?.userDetails ?
                     <div>
                       <h2 className="text-2xl font-semibold mb-6">Change Password</h2>
                       <form className="space-y-5" onSubmit={updatePassword}>
@@ -590,8 +590,7 @@ const UserLoginUi = () => {
         </p>
 
         {/* Button */}
-        <Link
-          href="/user-login"
+        <Link href={'/user-login?rfe=/profile'}
           className="inline-block bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold py-3 px-8 rounded-xl shadow-md hover:shadow-lg transition-all duration-300"
         >
           Login Now

@@ -3,17 +3,9 @@ import { CheckCircle2 } from "lucide-react";
 import { useParams } from "next/navigation";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { lsCartItem } from "@/app/redux/features/cartSlice";
 
 export default function ThankYouPage() {
     const { order_id } = useParams();
-    const dispatcher = useDispatch()
-    useEffect(() => {
-        dispatcher(lsCartItem())
-    }, [dispatcher])
-
 
     return (
         <div className="flex justify-center items-center  py-4 bg-white">

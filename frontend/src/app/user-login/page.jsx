@@ -1,17 +1,20 @@
 'use client'
 import { useEffect, useState } from "react";
 import { ArrowLeft } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Axiosinstance } from "../utils/helper";
 import { useDispatch } from "react-redux";
 import { addTouser } from "../redux/features/userSlice";
 import { ToastContainer, toast } from "react-toastify";
 
 export default function page() {
+  const searchParams  = useSearchParams()
+  const redirect = searchParams .get('rfe') || '/'
   const dispatcher = useDispatch()
   const [value, setValue] = useState(null);
   const router = useRouter();
   const [isLogin, setIsLogin] = useState(true);
+
 
   useEffect(() => {
     const cart = JSON.parse(localStorage.getItem('cart'));
@@ -27,6 +30,7 @@ export default function page() {
       if (res.status === 200) {
         toast.success(res.data.msg)
         dispatcher(addTouser({ user: res.data.data.user, token: res.data.data.token }))
+        router.push(redirect)
       }
       const data = {
         userId: res.data.data.user._id,

@@ -1,9 +1,10 @@
 'use client'
+import { emptyCart } from "@/app/redux/features/cartSlice";
 import { Axiosinstance, formatCurrencyINR } from "@/app/utils/helper";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
 
@@ -13,6 +14,7 @@ export default function CheckoutPage() {
     const router = useRouter()
     const user = useSelector((state) => state.user.userDetails)
     const cart = useSelector((state) => state.cart)
+    const dispatcher = useDispatch()
 
     const submithandler = () => {
         Axiosinstance.post('order/order-place', {
@@ -20,13 +22,13 @@ export default function CheckoutPage() {
             payment_mode: payment,
             shipping_details: user.shipping_address[address]
         }).then((res) => {
-            if (res.status == 201) {
-                toast.success(res.data.msg)
-                localStorage.setItem('cart', JSON.stringify({items:[],originalPrice_Total:0,finalPrice_Total:0}));
-                setTimeout(() => {
+            if (payment == 0) {
+                if (res.status == 201) {
+                    toast.success(res.data.msg)
+                    dispatcher(emptyCart())
                     router.push(`thankyou/${res.data.order_id}`)
-                }, 5000);
-            }
+                }
+            }else{}
         }).catch((error) => {
             console.log(error)
         })
