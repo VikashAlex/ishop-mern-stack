@@ -20,6 +20,10 @@ function CartItems({ product }) {
 
 
     const clickHandel = () => {
+        if (cart?.finalPrice_Total == 0 || cart?.items.length == 0) {
+            router.push('/store')
+            return toast.info("Please Add Item then order...");
+        }
         if (user) {
             router.push('checkout')
         } else {

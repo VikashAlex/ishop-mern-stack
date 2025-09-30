@@ -3,36 +3,95 @@ import { emptyCart } from "@/app/redux/features/cartSlice";
 import { Axiosinstance, formatCurrencyINR } from "@/app/utils/helper";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-
+import { useRazorpay } from "react-razorpay";
 
 export default function CheckoutPage() {
+    const {  Razorpay } = useRazorpay()
     const [address, setAddress] = useState(0)
     const [payment, setPayment] = useState(0)
     const router = useRouter()
     const user = useSelector((state) => state.user.userDetails)
+    const userToken = useSelector((state) => state.user.token)
     const cart = useSelector((state) => state.cart)
     const dispatcher = useDispatch()
 
+
     const submithandler = () => {
+        if (cart?.finalPrice_Total == 0 || cart?.items.length == 0) {
+            router.push('/store')
+            return toast.info("Please Add Item then order...");
+        }
         Axiosinstance.post('order/order-place', {
             userId: user?._id,
             payment_mode: payment,
             shipping_details: user.shipping_address[address]
         }).then((res) => {
-            if (payment == 0) {
-                if (res.status == 201) {
-                    toast.success(res.data.msg)
+            if (res.data.success) {
+                if (payment == 0) {
                     dispatcher(emptyCart())
                     router.push(`thankyou/${res.data.order_id}`)
+                    toast.success(res.data.msg)
+
                 }
-            }else{}
-        }).catch((error) => {
+                else {
+                    const options = {
+                        key: "rzp_test_RLJOXToaSAhYti",
+                        currency: "INR",
+                        name: "Vikash Company",
+                        description: "Test Transaction",
+                        order_id: res.data.razorpay_order_id, // Generate order_id on server
+                        handler: (Razorpayresponse) => {
+                            Axiosinstance.post('order/order-success', {
+                                order_id: res.data.order_id,
+                                user_id: user?._id,
+                                razorpay_response: Razorpayresponse
+                            },
+                                {
+                                    headers: {
+                                        Authorization: userToken,
+                                    }
+                                }
+                            ).then((res) => {
+                                dispatcher(emptyCart())
+                                router.push(`thankyou/${res.data.order_id}`)
+                                toast.success(res.data.message)
+                            }).catch((error) => {
+                                console.log(error)
+                            })
+                        },
+
+                        prefill: {
+                            name: user?.name,
+                            email: user?.email,
+                            contact: user.shipping_address[address].contact,
+                        },
+                        theme: {
+                            color: "#F37254",
+                        },
+                    };
+                    const razorpayInstance = new Razorpay(options);
+                    razorpayInstance.open();
+                }
+            }
+        }
+        ).catch((error) => {
             console.log(error)
         })
     }
+
+    useEffect(() => {
+        if (!user) {
+            router.push('/user-login?rfe=/checkout')
+        } else {
+            router.push('/checkout')
+        }
+    }, [user])
+
+
+
 
     return (
         <div className="min-h-screen bg-gray-50 py-8 px-6">

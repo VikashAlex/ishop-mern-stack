@@ -26,9 +26,9 @@ const orderSchema = new mongoose.Schema({
     product_Details: { type: [productDetailsSchema], require: true },
     order_total: { type: Number, require: true },
     payment_mode: { type: Number, require: true },
-    order_id: { type: String, default: null },
-    payment_id: { type: String, default: null },
-    order_status: { type: Number, enum: [1, 2, 3, 4, 5, 6], default: 1 },
+    razorpay_order_id: { type: String, default: null },
+    razorpay_payment_id: { type: String, default: null },
+    order_status: { type: Number, enum: [0,1, 2, 3, 4, 5, 6], default: 1 },
     shipping_details: { type: shppingDetailsSchema, require: true }
 }, {
     timestamps: true
