@@ -172,15 +172,15 @@ export default function CategoryPage() {
                   <td className="px-6 py-4 flex justify-center gap-2">
                     <button
                       onClick={() => deleteCategory(category._id)}
-                      className="flex items-center gap-1 px-3 py-1.5 bg-red-500 text-white rounded-lg hover:bg-red-600 transition text-xs"
+                      className="cursor-pointer flex items-center gap-1 px-3 py-1.5 bg-red-500 text-white rounded-lg hover:bg-red-600 transition text-xs"
                     >
                       <Trash2 className="w-4 h-4" /> Delete
                     </button>
-                    <button onClick={() => updateCategory(category._id)} className="flex items-center gap-1 px-3 py-1.5 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition text-xs">
+                    <button onClick={() => updateCategory(category._id)} className="cursor-pointer flex items-center gap-1 px-3 py-1.5 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition text-xs">
                       <RefreshCcw className="w-4 h-4" /> Update
                     </button>
                     <Link href={`/admin/category/edit/${category._id}`}>
-                      <button className="flex items-center gap-1 px-3 py-1.5 bg-green-500 text-white rounded-lg hover:bg-green-600 transition text-xs">
+                      <button className="cursor-pointer flex items-center gap-1 px-3 py-1.5 bg-green-500 text-white rounded-lg hover:bg-green-600 transition text-xs">
                         <Edit className="w-4 h-4" /> Edit
                       </button>
                     </Link>

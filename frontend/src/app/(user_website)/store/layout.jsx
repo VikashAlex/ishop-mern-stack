@@ -1,5 +1,5 @@
 import TopBanner from "../components/store/TopBanner";
-import PopularProduct from "../components/store/PopularProduct";
+import PopularCategories from "../components/store/PopularCategories";
 import Category from "../components/store/Category";
 import { getBrands, getCategory, getColors } from "../../../../library/api_calls";
 import BrandFilter from "../components/store/BrandFilter";
@@ -14,7 +14,7 @@ async function layout({ children }) {
   return (
     <section>
       <TopBanner />
-      <PopularProduct />
+      <PopularCategories Categories={Categories.data} />
       <main className="bg-white px-4 py-6 my-4  flex flex-col lg:flex-row gap-6">
         {/* Sidebar */}
         <section className="flex flex-col gap-y-3 w-full lg:w-[302px]">

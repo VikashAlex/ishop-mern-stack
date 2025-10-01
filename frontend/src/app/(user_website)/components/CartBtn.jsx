@@ -9,32 +9,30 @@ import { toast } from "react-toastify";
 
 export default function CartBtn({ productId, originalPrice, finalPrice }) {
     const dispatcher = useDispatch();
-    const user = useSelector((state)=>state.user.userDetails)
+    const user = useSelector((state) => state.user.userDetails)
 
     const addToCart = () => {
-        if (user!=null) {
-            Axiosinstance.post('/cart/add-to-cart',{
+        if (user != null) {
+            Axiosinstance.post('/cart/add-to-cart', {
                 productId,
-                userId:user?._id
-            }).then((res)=>{
-                if(res.status==200){
+                userId: user?._id
+            }).then((res) => {
+                if (res.status == 200) {
                     toast.success(res.data.msg)
                 }
-            }).catch((error)=>{
-                    console.log(error)
-                    toast.info(error.response.data.msg)
-               
+            }).catch((error) => {
+                console.log(error)
+                toast.info(error.response.data.msg)
+
             })
         }
-          dispatcher(addTocart({ productId, originalPrice, finalPrice }))
-          window.scrollTo({ top: 0, behavior: "smooth" });
+        dispatcher(addTocart({ productId, originalPrice, finalPrice }))
+        window.scrollTo({ top: 0, behavior: "smooth" });
     }
     return (
-        <button
-            onClick={addToCart}
-            className="flex items-center gap-2 text-[13px] px-[10px] cursor-pointer py-[5px] rounded-[8px] bg-gradient-to-r from-[#1ABA1A] to-[#43d443] text-white font-semibold shadow-lg hover:scale-105 hover:shadow-xl transition-all duration-300">
-            <ShoppingCart className="w-4 h-4" />
-            Add to Cart
+        <button onClick={addToCart} className="relative cursor-pointer  items-center justify-start inline-block px-5 py-1 overflow-hidden font-medium transition-all bg-[#1ABA1A] rounded-[7px] hover:bg-white group">
+            <span className="absolute inset-0 border-0 group-hover:border-[25px] ease-linear duration-100 transition-all border-white rounded-full"></span>
+            <span className="relative w-full text-left text-white transition-colors duration-200 ease-in-out group-hover:text-[#1ABA1A]">Add To Cart</span>
         </button>
     );
 }

@@ -35,7 +35,7 @@ const getProduct = async(id=null,categorySlug=null,brandSlug=null,colorSlug=null
         query.append("max",max)
     }
     const response =await Axiosinstance.get(`${API}?${query.toString()}`);
-    const data = await response.data;
+    const data = response.data;
     return data.getProduct
 }
 

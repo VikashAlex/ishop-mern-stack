@@ -122,14 +122,14 @@ function page() {
             <Link href="/admin/color">
               <button
                 type="button"
-                className="px-5 py-2 rounded-lg border border-gray-300 hover:bg-gray-100 transition"
+                className="cursor-pointer px-5 py-2 rounded-lg border border-gray-300 hover:bg-gray-100 transition"
               >
                 Cancel
               </button>
             </Link>
             <button
               type="submit"
-              className="px-5 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg shadow-md hover:shadow-lg transition"
+              className="cursor-pointer px-5 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg shadow-md hover:shadow-lg transition"
             >
               Save Color
             </button>
