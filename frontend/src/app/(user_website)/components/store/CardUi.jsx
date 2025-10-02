@@ -3,12 +3,14 @@ import { FaHeart } from "react-icons/fa";
 import { IoIosCheckmarkCircle } from "react-icons/io";
 import { FcCancel } from "react-icons/fc";
 import CartBtn from "../CartBtn";
+import Link from "next/link";
 
 function CardUi({ item }) {
   const {_id,finalPrice,originalPrice}=item;
 
   return (
     <div className="relative my-6 border-gray-200 border rounded-[7px]">
+       <Link href={`/product/${item._id}`}>
       <div className="absolute  px-3 top-3 left-0 w-full  flex items-center justify-between">
         {item.discountPercentage ? (
           <div className="bg-[#1ABA1A] rounded-[7px] h-[41px] w-[73px] flex flex-col justify-center items-center text-white">
@@ -34,8 +36,10 @@ function CardUi({ item }) {
           className=" object-cover object-center"
         />
       </div>
+      </Link>
 
       <div className="  flex flex-col justify-between px-2 pb-4 ">
+        <Link href={`/product/${item._id}`}>
         <div>
           <p className="text-[#666666] text-center my-2 font-semibold">
             {item?.count}
@@ -72,6 +76,7 @@ function CardUi({ item }) {
             </>
           )}
         </div>
+        </Link>
 
         <div className="my-2">
           <CartBtn productId={_id} finalPrice={finalPrice} originalPrice={originalPrice}/>

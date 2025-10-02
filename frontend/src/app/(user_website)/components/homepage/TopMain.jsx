@@ -1,11 +1,7 @@
-import { FaTelegram } from "react-icons/fa";
-import { getCategory } from "../../../../../library/api_calls";
+
 import Link from "next/link";
 import HomeSlider from "./HomeSlider";
-
-async function TopMain() {
-
-  const Categories = await getCategory(null);
+function TopMain({ Categories }) {
 
   return (
     <div className="flex gap-x-5 my-2 px-4">
@@ -14,7 +10,7 @@ async function TopMain() {
           Category
         </h1>
         <ul className="flex flex-col gap-y-3 px-2 ">
-          {Categories?.data.slice(0, 5)?.map((Category) => {
+          {Categories?.slice(0, 5)?.map((Category) => {
             return (
               <Link key={Category._id} href={`/store/${Category.slug}`}>
                 <li
@@ -35,7 +31,7 @@ async function TopMain() {
       </div>
 
       <div className="flex-1 rounded-[30px] h-[380px]  overflow-hidden">
-          <HomeSlider />
+        <HomeSlider />
       </div>
     </div>
   );

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import CardUi from "../store/CardUi";
+import Link from "next/link";
 const product = [
     {
         img: "/product/prod19.png",
@@ -35,71 +36,11 @@ const product = [
 
 
 
-const products = [
-  {
-    name: "uLosk Mini case 2.0, Xenon i10 / 32GB / SSD 512GB /VGA 8GB",
-    img: "/bestProduct/prod1.png",
-    alt: "prod1",
-    price: "$1,729.00",
-    mrp: "$2,119.00",
-    shipping: "free shipping",
-    stock: "Out of stock",
-    diccount: "$59.00",
-    count: "(8)"
-  },
-
-  {
-    name: "Opplo Watch Series 8 GPS + Cellular Stainless Steel Case with Milanese Loop",
-    img: "/bestProduct/prod2.png",
-    alt: "prod2",
-    price: "$979.00",
-    mrp: "$1,259.00",
-    shipping: "$2.98 Shipping",
-    stock: "  In stock",
-    diccount: "$49.00",
-    count: "(11)",
-    gift: "FREE GIFT"
-  },
-  {
-    name: "iSmart 24V Charger",
-    img: "/bestProduct/prod3.png",
-    alt: "prod3",
-    price: "$879.00",
-    mrp: "$959.00",
-    shipping: "free shipping",
-    stock: "In stock",
-    diccount: "$56.00",
-    count: "(9)"
-  },
-
-  {
-    name: "OPod Pro 12.9 Inch M1 2023, 64GB + Wifi, GPS",
-    img: "/bestProduct/prod4.png",
-    alt: "prod4",
-    price: "$569.00",
-    mrp: "$759.00",
-    shipping: "free shipping",
-    stock: "In stock",
-    diccount: "$56.00",
-    count: "(152)",
-    gift: "FREE GIFT"
-  },
-  {
-    name: "uLosk Mini case 2.0, Xenon i10 / 32GB / SSD 512GB /VGA 8GB",
-    img: "/product/prod21.png",
-    alt: "prod5",
-    price: "$1,729.00",
-    mrp: "$2,119.00",
-    shipping: "free shipping",
-    stock: "Out of stock",
-    diccount: "$59.00",
-    count: "(8)"
-  },
 
 
-]
+function TopSelling({ products }) {
 
-function TopSelling() {
+
     return (
         <main className="bg-white px-4 py-6 my-4 ">
             <div className="flex justify-between items-center px-6">
@@ -108,7 +49,9 @@ function TopSelling() {
                 </h3>
 
                 <div className="text-[13px] uppercase text-[#666666]">
-                    view all
+                    <Link href='/store'>
+                        view all
+                    </Link>
                 </div>
             </div>
 
@@ -126,9 +69,11 @@ function TopSelling() {
 
                     <p className="text-[11px] md:text-[18px] text-[#666666] mb-2">Rise to the challenge</p>
 
-                    <button className="text-white bg-black py-2 px-4 rounded-[10px] cursor-pointer font-semibold text-sm md:text-base">
-                        SHOP NOW
-                    </button>
+                    <Link href='/store'>
+                        <button className="text-white bg-black py-2 px-4 rounded-[10px] cursor-pointer font-semibold text-sm md:text-base">
+                            SHOP NOW
+                        </button>
+                    </Link>
                 </div>
 
                 {/* Right Banner */}
@@ -140,7 +85,7 @@ function TopSelling() {
                                 key={index + 1}
                             >
                                 <div>
-                                    <Image
+                                    <img
                                         src={pro.img}
                                         width={40}
                                         height={40}
@@ -164,7 +109,7 @@ function TopSelling() {
             </div>
 
             <div className="grid grid-cols-5 gap-x-3 px-6">
-                {products.map((item, index) => (
+                {products?.filter((p) => p.topSelling === true).map((item, index) => (
                     <CardUi item={item} key={index + 1} />
                 ))}
             </div>

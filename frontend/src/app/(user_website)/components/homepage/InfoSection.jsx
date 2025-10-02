@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const product = [
     {
         img: "/product/prod19.png",
@@ -72,7 +74,9 @@ function InfoSection() {
                         </h3>
 
                         <div className="text-[13px] uppercase text-[#666666]">
-                            view all
+                            <Link href={'/store'}>
+                                view all
+                            </Link>
                         </div>
                     </div>
                     <div className='my-3 p-6  h-[190px] bg-[url("/homeimg/img18.png")] rounded-[10px] bg-center bg-cover '>
@@ -84,30 +88,34 @@ function InfoSection() {
                     <div className='grid grid-cols-2'>
                         {
                             product.slice(8, 10).map((item, index) => {
-                                return <div key={index + 1} className=" flex flex-col  items-center">
-                                    <div className="w-[120px] h-[120px] rounded-full  flex justify-center items-center">
-                                        <img src={item.img} alt={`image${index}`} width={100} height={100} />
+                                return <Link href={'/store'} key={index + 1}>
+                                    <div className=" flex flex-col  items-center">
+                                        <div className="w-[120px] h-[120px] rounded-full  flex justify-center items-center">
+                                            <img src={item.img} alt={`image${index}`} width={100} height={100} />
+                                        </div>
+                                        <div className="text-center">
+                                            <h1 className="text-center font-bold text-[14px]">{item.brands}</h1>
+                                            <p className="text-[#666666] text-[10px]">{item.items}</p>
+                                        </div>
                                     </div>
-                                    <div className="text-center">
-                                        <h1 className="text-center font-bold text-[14px]">{item.brands}</h1>
-                                        <p className="text-[#666666] text-[10px]">{item.items}</p>
-                                    </div>
-                                </div>
+                                </Link>
                             })
                         }
                     </div>
                     <div className='grid grid-cols-2'>
                         {
                             product.slice(10, 12).map((item, index) => {
-                                return <div key={index + 1} className=" flex flex-col  items-center">
-                                    <div className="w-[120px] h-[120px] rounded-full  flex justify-center items-center">
-                                        <img src={item.img} alt={`image${index}`} width={100} height={100} />
+                                return <Link href={'/store'} key={index + 1}>
+                                    <div key={index + 1} className=" flex flex-col  items-center">
+                                        <div className="w-[120px] h-[120px] rounded-full  flex justify-center items-center">
+                                            <img src={item.img} alt={`image${index}`} width={100} height={100} />
+                                        </div>
+                                        <div className="text-center">
+                                            <h1 className="text-center font-bold text-[14px]">{item.brands}</h1>
+                                            <p className="text-[#666666] text-[10px]">{item.items}</p>
+                                        </div>
                                     </div>
-                                    <div className="text-center">
-                                        <h1 className="text-center font-bold text-[14px]">{item.brands}</h1>
-                                        <p className="text-[#666666] text-[10px]">{item.items}</p>
-                                    </div>
-                                </div>
+                                </Link>
                             })
                         }
                     </div>
@@ -121,7 +129,7 @@ function InfoSection() {
                         </h3>
 
                         <div className="text-[13px] uppercase text-[#666666]">
-                            view all
+                            <Link href={'/store'} >view all</Link>
                         </div>
                     </div>
                     <div className='my-3 p-7 pb-5  h-[190px] bg-[url("/homeimg/img19.png")] rounded-[10px] bg-center bg-cover '>
@@ -134,30 +142,34 @@ function InfoSection() {
                     <div className='grid grid-cols-2'>
                         {
                             product.slice(0, 2).map((item, index) => {
-                                return <div key={index + 1} className=" flex flex-col  items-center">
-                                    <div className="w-[120px] h-[120px] rounded-full  flex justify-center items-center">
-                                        <img src={item.img} alt={`image${index}`} width={100} height={100} />
+                                return <Link href={'/store'} key={index + 1}>
+                                    <div key={index + 1} className=" flex flex-col  items-center">
+                                        <div className="w-[120px] h-[120px] rounded-full  flex justify-center items-center">
+                                            <img src={item.img} alt={`image${index}`} width={100} height={100} />
+                                        </div>
+                                        <div className="text-center">
+                                            <h1 className="text-center font-bold text-[14px]">{item.brands}</h1>
+                                            <p className="text-[#666666] text-[10px]">{item.items}</p>
+                                        </div>
                                     </div>
-                                    <div className="text-center">
-                                        <h1 className="text-center font-bold text-[14px]">{item.brands}</h1>
-                                        <p className="text-[#666666] text-[10px]">{item.items}</p>
-                                    </div>
-                                </div>
+                                </Link>
                             })
                         }
                     </div>
                     <div className='grid grid-cols-2'>
                         {
                             product.slice(2, 4).map((item, index) => {
-                                return <div key={index + 1} className=" flex flex-col  items-center">
-                                    <div className="w-[120px] h-[120px] rounded-full  flex justify-center items-center">
-                                        <img src={item.img} alt={`image${index}`} width={100} height={100} />
+                                return <Link href={'/store'} key={index + 1}>
+                                    <div key={index + 1} className=" flex flex-col  items-center">
+                                        <div className="w-[120px] h-[120px] rounded-full  flex justify-center items-center">
+                                            <img src={item.img} alt={`image${index}`} width={100} height={100} />
+                                        </div>
+                                        <div className="text-center">
+                                            <h1 className="text-center font-bold text-[14px]">{item.brands}</h1>
+                                            <p className="text-[#666666] text-[10px]">{item.items}</p>
+                                        </div>
                                     </div>
-                                    <div className="text-center">
-                                        <h1 className="text-center font-bold text-[14px]">{item.brands}</h1>
-                                        <p className="text-[#666666] text-[10px]">{item.items}</p>
-                                    </div>
-                                </div>
+                                </Link>
                             })
                         }
                     </div>
@@ -171,7 +183,7 @@ function InfoSection() {
                         </h3>
 
                         <div className="text-[13px] uppercase text-[#666666]">
-                            view all
+                            <Link href={'/store'}>view all</Link>
                         </div>
                     </div>
                     <div className='my-3 pb-5  h-[190px] bg-[url("/homeimg/img20.png")] rounded-[10px] bg-center bg-cover flex flex-col justify-center items-center'>
@@ -182,30 +194,34 @@ function InfoSection() {
                     <div className='grid grid-cols-2'>
                         {
                             product.slice(4, 6).map((item, index) => {
-                                return <div key={index + 1} className=" flex flex-col  items-center">
-                                    <div className="w-[120px] h-[120px] rounded-full  flex justify-center items-center">
-                                        <img src={item.img} alt={`image${index}`} width={100} height={100} />
+                                return <Link href={'/store'} key={index + 1}>
+                                    <div key={index + 1} className=" flex flex-col  items-center">
+                                        <div className="w-[120px] h-[120px] rounded-full  flex justify-center items-center">
+                                            <img src={item.img} alt={`image${index}`} width={100} height={100} />
+                                        </div>
+                                        <div className="text-center">
+                                            <h1 className="text-center font-bold text-[14px]">{item.brands}</h1>
+                                            <p className="text-[#666666] text-[10px]">{item.items}</p>
+                                        </div>
                                     </div>
-                                    <div className="text-center">
-                                        <h1 className="text-center font-bold text-[14px]">{item.brands}</h1>
-                                        <p className="text-[#666666] text-[10px]">{item.items}</p>
-                                    </div>
-                                </div>
+                                </Link>
                             })
                         }
                     </div>
                     <div className='grid grid-cols-2'>
                         {
                             product.slice(6, 8).map((item, index) => {
-                                return <div key={index + 1} className=" flex flex-col  items-center">
-                                    <div className="w-[120px] h-[120px] rounded-full  flex justify-center items-center">
-                                        <img src={item.img} alt={`image${index}`} width={100} height={100} />
+                                return <Link href={'/store'} key={index + 1}>
+                                    <div key={index + 1} className=" flex flex-col  items-center">
+                                        <div className="w-[120px] h-[120px] rounded-full  flex justify-center items-center">
+                                            <img src={item.img} alt={`image${index}`} width={100} height={100} />
+                                        </div>
+                                        <div className="text-center">
+                                            <h1 className="text-center font-bold text-[14px]">{item.brands}</h1>
+                                            <p className="text-[#666666] text-[10px]">{item.items}</p>
+                                        </div>
                                     </div>
-                                    <div className="text-center">
-                                        <h1 className="text-center font-bold text-[14px]">{item.brands}</h1>
-                                        <p className="text-[#666666] text-[10px]">{item.items}</p>
-                                    </div>
-                                </div>
+                                </Link>
                             })
                         }
                     </div>

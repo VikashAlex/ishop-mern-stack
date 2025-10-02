@@ -1,58 +1,85 @@
-import Image from "next/image";
-import React from "react";
+'use client'
 
-function FretureBrand() {
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
+
+function FretureBrand({ Brands, Categories }) {
+  const [brandLimit, setBrandLimit] = useState(5)
+  const [cateLimit, setCateLimit] = useState(5)
+
+  const router = useRouter()
+  const [selBrand, setSelBrand] = useState(null);
+  useEffect(() => {
+    const brand = new URLSearchParams({ brand: selBrand });
+    if (selBrand) {
+      router.push(`/store?${brand.toString()}`);
+
+    }
+  }, [selBrand])
+
   return (
     <div className="flex gap-x-5 my-3 px-4">
-      <div className=" bg-white p-4 rounded-[10px] flex-1/2 ">
+      <div className=" bg-white p-4 rounded-[10px] flex-1/2  ">
         <h1 className="text-[18px] font-bold flex uppercase justify-between mb-5">
           featured brands{" "}
-          <span className="text-[13px] font-normal capitalize text-[#666666]">
-            View All{" "}
-          </span>
+          {
+            brandLimit <= 5 ?
+              <span onClick={() => setBrandLimit(Infinity)} className="cursor-pointer text-[13px] font-normal capitalize text-[#666666]">
+                View All
+              </span>
+              :
+              <span onClick={() => setBrandLimit(5)} className="cursor-pointer text-[13px] font-normal capitalize text-[#666666]">
+                Show less
+              </span>
+          }
         </h1>
-        <div className="grid grid-cols-5 items-center justify-center  gap-x-3 gap-y-4 px-3 mb-4  ">
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item) => {
+        <div className="grid grid-cols-5 items-center justify-items-center gap-3 ">
+          {Brands?.slice(0, brandLimit).map((item) => {
             return (
-              <Image
-                key={item}
-                src={`/homeimg/img${item}.png`}
+              <img
+                onClick={() => setSelBrand(item.slug)}
+                key={item._id}
+                src={`${process.env.NEXT_PUBLIC_API_BASE_URL}images/brands/${item.logo}`}
                 width={70}
                 height={100}
                 style={{ height: "auto" }}
-                alt={`image${item}`}
+                alt={`image${item.name}`}
               />
             );
           })}
         </div>
       </div>
+
       <div className=" bg-white p-4 rounded-[10px] flex-1/2 ">
         <h1 className="text-[18px] font-bold flex uppercase justify-between mb-5">
           top categories
-          <span className="text-[13px] font-normal capitalize text-[#666666]">
-            View All{" "}
-          </span>
+          {
+            cateLimit <= 5 ?
+              <span onClick={() => setCateLimit(Infinity)} className="cursor-pointer text-[13px] font-normal capitalize text-[#666666]">
+                View All
+              </span>
+              :
+              <span onClick={() => setCateLimit(5)} className="cursor-pointer text-[13px] font-normal capitalize text-[#666666]">
+                Show less
+              </span>
+          }
         </h1>
-        <div className="flex justify-between items-center  gap-y-4 px-5 mb-4  ">
-          {[
-            { img: 11, name: "Laptops" },
-            { img: 12, name: "PC Gaming" },
-            { img: 13, name: "Headphones" },
-            { img: 14, name: "Monitors" },
-          ].map((item) => {
+        <div className="grid grid-cols-5 items-center justify-items-center gap-3">
+          {Categories?.slice(0, cateLimit).map((item) => {
             return (
-              <div key={item.img} >
-                <div className="w-[70px] h-[100px] flex  justify-center items-center">
-                  <Image
-                    src={`/homeimg/img${item.img}.png`}
-                    width={70}
-                    height={100}
-                    style={{ height: "auto" }}
-                    alt={`${item.name}`}
+              <div key={item._id} className="flex flex-col items-center justify-center" >
+                <Link href={`/store/${item.slug}`} >
+                  <div className="w-[70px] h-[70px] flex  justify-center items-center">
+                    <img
+                      className="rounded-full h-full w-full object-cover"
+                      src={`${process.env.NEXT_PUBLIC_API_BASE_URL}images/categoryImg/${item.image}`}
+                      alt={item.name}
 
-                  />
-                </div>
-                <p className="mt-2">{item.name}</p>
+                    />
+                  </div>
+                </Link>
+                <p className="mt-2 text-[12px] text-center">{item.name}</p>
               </div>
             );
           })}

@@ -23,7 +23,6 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable}   antialiased`}
       >
         <StoreProvider>
-
           <Header />
           <ToastContainer/>
           {children}
