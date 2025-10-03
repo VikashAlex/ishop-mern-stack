@@ -64,7 +64,7 @@ const orderController = {
 
             if (payment_mode == 0) {
                 await CartModel.deleteMany({ user_id: userId });
-                order.order_status=1
+                order.order_status = 1
                 await order.save();
                 return res.status(201).json({
                     msg: "COD Order placed successfully",
@@ -97,6 +97,19 @@ const orderController = {
         } catch (err) {
             console.error(err);
             res.status(500).json({ msg: "Server error", success: false });
+        }
+    },
+    async findOrder(req, res) {
+        try {
+            const { id } = req.params;
+            const orderId = await orderModel.findById(id);
+            if (!orderId) {
+                return res.status(404).json({ msg: "Order not found with this ID...", success: false });
+            }
+            return res.status(201).json({ msg: "Order Found...", success: true });
+        } catch (error) {
+            console.log(error)
+            return res.status(400).json({ msg: "Please enter a valid order ID....", success: false });
         }
     }
 };

@@ -20,9 +20,9 @@ export default function CheckoutPage() {
 
 
     const submithandler = () => {
-        if (cart?.finalPrice_Total == 0 || cart?.items.length == 0) {
-            router.push('/store')
-            return toast.info("Please Add Item then order...");
+        if (user?.shipping_address.length <= 0) {
+            router.push('/profile')
+            return toast.info("Please Add Address...");
         }
         Axiosinstance.post('order/order-place', {
             userId: user?._id,
