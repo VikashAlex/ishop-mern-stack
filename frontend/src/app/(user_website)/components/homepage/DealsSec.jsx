@@ -4,235 +4,181 @@ import HomeTab from "./HomeTab";
 import Slider from "./Slider";
 import Link from "next/link";
 
-
-
 function DealsSec({ producte }) {
-  const [product, setProduct] = useState(null)
+  const [product, setProduct] = useState(null);
+
   useEffect(() => {
     const randIndex = Math.floor(Math.random() * producte.length);
-    setProduct(producte[randIndex])
-  }, [producte])
-
+    setProduct(producte[randIndex]);
+  }, [producte]);
 
   return (
-    <div className="px-4">
-      <div className="flex gap-x-5">
-        <div className="w-[971px] ">
-          <div className="bg-[#01A49E] uppercase text-white rounded-[10px] text-[18px] font-bold py-3 pl-6 ">
+    <div className="px-2 md:px-4 md:block flex flex-col gap-5 ">
+      {/* Top Section: Deals + Side Slider */}
+      <div className="flex flex-col lg:flex-row gap-5">
+        {/* Left (Deal of the Day) */}
+        <div className="flex-1 w-full lg:w-[900px]">
+          <div className="bg-[#01A49E] uppercase text-white rounded-[10px] text-[16px] md:text-[18px] font-bold py-3 pl-4 md:pl-6">
             Deals of the day
           </div>
 
-          {
-            product ?
-              <div className=" bg-white h-full rounded-[10px] flex px-6 py-5">
-                {/* Left Side Images */}
-                <div className="flex-1/2 flex p-5">
-                  <div className="w-[30px] flex flex-col justify-items-start gap-y-5">
-                    {product?.images?.map((img, i) => (
-                      <img
-                        key={i}
-                        src={`${process.env.NEXT_PUBLIC_API_BASE_URL}images/product/${img}`}
-                        width={100}
-                        height={100}
-                        className="rounded-[10px]"
-                        alt={`${product?.name}-${i}`}
-                      />
-                    ))}
-                  </div>
-
-                  <div className="flex-1 flex flex-col justify-center items-center ">
-                    <div className="flex justify-end w-full">
-                      <div className="bg-[#EBEDF3] w-[30px] h-[30px] rounded-full"></div>
-                    </div>
-                    <div>
-                      <img
-                        src={`${process.env.NEXT_PUBLIC_API_BASE_URL}images/product/${product?.thumbnail}`}
-                        width={200}
-                        height={200}
-                        alt={product?.name}
-                      />
-                    </div>
-                  </div>
+          {product ? (
+            <div className="bg-white rounded-[10px] flex flex-col md:flex-row px-4 md:px-6 py-5 h-full">
+              {/* Left: Product Images */}
+              <div className="flex flex-col md:flex-row md:flex-1/2 p-3 md:p-5">
+                <div className="flex md:flex-col gap-3 md:gap-y-5 justify-center md:justify-start">
+                  {product?.images?.slice(0,3).map((img, i) => (
+                    <img
+                      key={i}
+                      src={`${process.env.NEXT_PUBLIC_API_BASE_URL}images/product/${img}`}
+                      width={60}
+                      height={60}
+                      className="rounded-[8px]"
+                      alt={`${product?.name}-${i}`}
+                    />
+                  ))}
                 </div>
 
-                {/* Right Side Info */}
-                <div className="flex-1/2 px-5">
-                  <p className="text-[#666] text-center mb-1">({product?.colors?.length})</p>
-
-                  <h1 className="font-bold text-[16px] mb-2">{product?.name}</h1>
-
-                  <div className="flex items-center gap-x-3 mb-2">
-                    <h1 className="font-bold text-[#01A49E]">
-                      ₹{product?.finalPrice?.toLocaleString()}
-                    </h1>
-                    <p className="line-through text-[#666666]">
-                      ₹{product?.originalPrice?.toLocaleString()}
-                    </p>
+                <div className="flex-1 flex flex-col justify-center items-center mt-4 md:mt-0">
+                  <div className="flex justify-end w-full">
+                    <div className="bg-[#EBEDF3] w-[25px] h-[25px] md:w-[30px] md:h-[30px] rounded-full"></div>
                   </div>
-
-                  <div
-                    className="text-[12px] mb-4"
-
-                  >
-
-                    {product?.shortDescription}
-                  </div>
-
-                  <div className="flex gap-x-3 items-center mb-5">
-                    <div className="text-[#01A49E] rounded-[6px] bg-gray-200 text-[12px] py-1 px-3 uppercase font-bold ">
-                      free shipping
-                    </div>
-                    <div className="text-[#01A49E] rounded-[6px] bg-gray-200 text-[12px] py-1 px-3 uppercase font-bold ">
-                      free gift
-                    </div>
-                  </div>
-
-                  {/* Fake countdown */}
-                  <div className="flex gap-x-3 items-center py-3 border-b border-[#EBEDF3]">
-                    <div className="w-[100px] text-sm font-bold">
-                      hurry up! Promotion will expires in
-                    </div>
-                    <div className="px-6 flex-1 flex justify-between ">
-                      <div className="w-[55px] h-[74px] rounded-[6px] bg-[#EBEDF3] flex justify-center items-center font-bold">
-                        -01
-                      </div>
-                      <div className="w-[55px] h-[74px] rounded-[6px] bg-[#EBEDF3] flex justify-center items-center font-bold">
-                        -12
-                      </div>
-                      <div className="w-[55px] h-[74px] rounded-[6px] bg-[#EBEDF3] flex justify-center items-center font-bold">
-                        -45
-                      </div>
-                      <div className="w-[55px] h-[74px] rounded-[6px] bg-[#EBEDF3] flex justify-center items-center font-bold">
-                        -09
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Progress Bar */}
-                  <div className="my-5">
-                    <div className="h-[10px] bg-[#E2E4EB] rounded-[10px] mb-2">
-                      <div
-                        className="bg-[#01A49E] h-full rounded-[10px]"
-                        style={{ width: "50%" }}
-                      ></div>
-                    </div>
-                    <p>
-                      Sold: <span className="font-bold">26/75</span>
-                    </p>
-                  </div>
-                  <div className="my-3">
-                    <Link href={`/product/${product._id}`}>
-                      <button className="btn btn-outline px-3 py-1 rounded-2xl cursor-pointer bg-[#EBEDF3] border transition-all duration-300 hover:bg-[#01A49E] hover:text-white border-[#01A49E] text-[#01A49E]">Buy Now</button>
-                    </Link>
-                  </div>
+                  <img
+                    src={`${process.env.NEXT_PUBLIC_API_BASE_URL}images/product/${product?.thumbnail}`}
+                    width={160}
+                    height={160}
+                    alt={product?.name}
+                    className="object-contain"
+                  />
                 </div>
               </div>
-              :
 
-              <div className="bg-white rounded-[10px] flex px-6 py-5">
-                {/* Left Side Images */}
-                <div className="flex-1/2 flex p-5">
-                  <div className="w-[30px] flex flex-col gap-y-5">
-                    {[1, 2, 3, 4].map((i) => (
+              {/* Right: Info */}
+              <div className="flex-1/2 px-2 md:px-5 mt-4 md:mt-0 text-sm">
+                <p className="text-[#666] text-center mb-1">
+                  ({product?.colors?.length})
+                </p>
+                <h1 className="font-bold text-[15px] md:text-[16px] mb-2 text-center md:text-left">
+                  {product?.name}
+                </h1>
+
+                <div className="flex flex-wrap justify-center md:justify-start items-center gap-2 mb-2">
+                  <h1 className="font-bold text-[#01A49E] text-[15px]">
+                    ₹{product?.finalPrice?.toLocaleString()}
+                  </h1>
+                  <p className="line-through text-[#666666] text-[14px]">
+                    ₹{product?.originalPrice?.toLocaleString()}
+                  </p>
+                </div>
+
+                <p className="text-[12px] md:text-[13px] mb-3 text-center md:text-left">
+                  {product?.shortDescription}
+                </p>
+
+                <div className="flex flex-wrap justify-center md:justify-start gap-2 mb-4">
+                  <div className="text-[#01A49E] bg-gray-200 text-[11px] py-1 px-3 rounded-[6px] font-bold uppercase">
+                    free shipping
+                  </div>
+                  <div className="text-[#01A49E] bg-gray-200 text-[11px] py-1 px-3 rounded-[6px] font-bold uppercase">
+                    free gift
+                  </div>
+                </div>
+
+                {/* Countdown */}
+                <div className="flex flex-col md:flex-row md:items-center gap-3 py-3 border-b border-[#EBEDF3] text-center md:text-left">
+                  <div className="text-xs md:text-sm font-bold">
+                    Hurry up! Offer ends soon
+                  </div>
+                  <div className="flex justify-center md:justify-between gap-2 flex-wrap">
+                    {["-01", "-12", "-45", "-09"].map((t, i) => (
                       <div
                         key={i}
-                        className="w-[50px] h-[50px] bg-gray-200 rounded-md animate-pulse"
-                      ></div>
+                        className="w-[45px] h-[55px] md:w-[55px] md:h-[74px] bg-[#EBEDF3] rounded-[6px] flex justify-center items-center font-bold"
+                      >
+                        {t}
+                      </div>
                     ))}
                   </div>
-
-                  <div className="flex-1 flex flex-col justify-center items-center">
-                    <div className="flex justify-end w-full">
-                      <div className="bg-gray-200 animate-pulse w-[30px] h-[30px] rounded-full"></div>
-                    </div>
-                    <div className="mt-4">
-                      <div className="w-[200px] h-[200px] bg-gray-200 animate-pulse rounded-md"></div>
-                    </div>
-                  </div>
                 </div>
 
-                {/* Right Side Info */}
-                <div className="flex-1/2 px-5">
-                  <div className="w-16 h-4 bg-gray-200 animate-pulse mx-auto mb-2 rounded"></div>
-                  <div className="h-5 bg-gray-200 animate-pulse w-3/4 mb-2 rounded"></div>
-                  <div className="flex gap-x-3 mb-2">
-                    <div className="h-6 w-20 bg-gray-200 animate-pulse rounded"></div>
-                    <div className="h-6 w-20 bg-gray-200 animate-pulse rounded"></div>
+                {/* Progress Bar */}
+                <div className="my-4">
+                  <div className="h-[8px] md:h-[10px] bg-[#E2E4EB] rounded-[10px] mb-2">
+                    <div
+                      className="bg-[#01A49E] h-full rounded-[10px]"
+                      style={{ width: "50%" }}
+                    ></div>
                   </div>
-                  <div className="h-10 bg-gray-200 animate-pulse w-full mb-4 rounded"></div>
+                  <p className="text-xs md:text-sm">
+                    Sold: <span className="font-bold">26/75</span>
+                  </p>
+                </div>
 
-                  <div className="flex gap-x-3 items-center mb-5">
-                    <div className="h-6 w-20 bg-gray-200 animate-pulse rounded"></div>
-                    <div className="h-6 w-20 bg-gray-200 animate-pulse rounded"></div>
-                  </div>
-
-                  {/* Countdown Dummy */}
-                  <div className="flex gap-x-3 items-center py-3 border-b border-[#EBEDF3]">
-                    <div className="w-[100px] h-4 bg-gray-200 animate-pulse rounded"></div>
-                    <div className="px-6 flex-1 flex justify-between gap-2">
-                      {[1, 2, 3, 4].map((i) => (
-                        <div
-                          key={i}
-                          className="w-[55px] h-[74px] bg-gray-200 animate-pulse rounded"
-                        ></div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Progress Bar Dummy */}
-                  <div className="my-5">
-                    <div className="h-[10px] bg-gray-200 rounded-[10px] mb-2 animate-pulse"></div>
-                    <div className="w-24 h-4 bg-gray-200 animate-pulse rounded"></div>
-                  </div>
+                <div className="my-3 text-center md:text-left">
+                  <Link href={`/product/${product._id}`}>
+                    <button className="px-4 py-2 rounded-2xl bg-[#EBEDF3] border border-[#01A49E] text-[#01A49E] hover:bg-[#01A49E] hover:text-white transition-all duration-300 text-sm">
+                      Buy Now
+                    </button>
+                  </Link>
                 </div>
               </div>
-          }
-
+            </div>
+          ) : (
+            <div className="bg-white rounded-[10px] h-[200px] animate-pulse" />
+          )}
         </div>
 
-
-
-        {/* right  */}
-        <div className="flex flex-col gap-y-3 w-[200px] flex-1 ">
-          <Slider img1={'bg-[url("/homeimg/img15.png")]'} img2={'bg-[url("/homeimg/img16.png")]'} img3={'bg-[url("/homeimg/img17.png")]'} />
-          <Slider img1={'bg-[url("/homeimg/img16.png")]'} img2={'bg-[url("/homeimg/img15.png")]'} img3={'bg-[url("/homeimg/img17.png")]'} />
-          <Slider img1={'bg-[url("/homeimg/img16.png")]'} img2={'bg-[url("/homeimg/img17.png")]'} img3={'bg-[url("/homeimg/img15.png")]'} />
-        </div>
-
-      </div>
-
-
-      {/* miidle section */}
-      <div>
-        <div className="bg-[#01A49E] rounded-[20px] h-[140px] relative overflow-hidden text-white flex justify-around items-center">
-          <div className="absolute h-[400px] w-[400px] -z-0 rounded-full bg-[#5F81A2] left-75 top-20 -translate-y-1/2"></div>
-          <div>
-            <h1 className="uppercase font-bold text-[24px]">Pre Order</h1>
-            <p className="text-[14px]">From $399</p>
+        {/* Right (Sliders) */}
+        <div className="flex flex-col gap-3 w-full lg:w-[300px]">
+          <Slider
+            img1={'bg-[url("/homeimg/img15.png")]'}
+            img2={'bg-[url("/homeimg/img16.png")]'}
+            img3={'bg-[url("/homeimg/img17.png")]'}
+          />
+          <div className="md:block hidden">
+          <Slider
+            img1={'bg-[url("/homeimg/img17.png")]'}
+            img2={'bg-[url("/homeimg/img15.png")]'}
+            img3={'bg-[url("/homeimg/img16.png")]'}
+          />
           </div>
-
-          <div className="h-[125px] w-[386px] mt-[15px] z-1 bg-[url('/homeimg/banner2.png')] bg-cover">
-
+          <div className="md:block hidden">
+            <Slider
+            img1={'bg-[url("/homeimg/img16.png")]'}
+            img2={'bg-[url("/homeimg/img15.png")]'}
+            img3={'bg-[url("/homeimg/img17.png")]'}
+          />
           </div>
-
-          <div>
-            <p className="text-[12px]">Opplo Watch Sport Series 8</p>
-            <h1 className="text-[30px]">A healthy leap ahead</h1>
-          </div>
-
-          <div className='flex justify-items-end'>
-            <Link href='/store'>
-              <button className="bg-[#fff] text-black py-2 px-4 rounded-full font-bold">Discover Now</button>
-            </Link>
-          </div>
-
-
+          
         </div>
       </div>
-      {/* tab section */}
 
+      {/* Middle Banner */}
+      <div className="bg-[#01A49E] rounded-[20px] h-auto md:h-[140px] relative overflow-hidden text-white flex flex-col md:flex-row justify-between items-center gap-3 md:gap-0 px-4 md:px-10 md:py-0 py-6 ">
+        <div className="absolute h-[400px] w-[400px] rounded-full bg-[#5F81A2] -z-0 left-0 top-0 opacity-40"></div>
+        <div className="z-10 text-center md:text-left">
+          <h1 className="uppercase font-bold text-[20px] md:text-[24px]">Pre Order</h1>
+          <p className="text-[14px]">From $399</p>
+        </div>
+
+        <div className="h-[140px] w-full md:w-[386px] bg-[url('/homeimg/banner2.png')] bg-cover bg-center rounded-lg"></div>
+
+        <div className="z-10 text-center md:text-right">
+          <p className="text-[12px]">Opplo Watch Sport Series 8</p>
+          <h1 className="text-[20px] md:text-[30px] font-bold">A healthy leap ahead</h1>
+        </div>
+
+        <div className="z-10">
+          <Link href="/store">
+            <button className="bg-white text-black py-2 px-5 rounded-full font-bold text-sm md:text-base">
+              Discover Now
+            </button>
+          </Link>
+        </div>
+      </div>
+
+      {/* Product Tabs */}
       <HomeTab products={producte} />
-
     </div>
   );
 }

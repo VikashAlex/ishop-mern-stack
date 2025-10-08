@@ -172,7 +172,7 @@ export default function page() {
               {/* Name */}
               <input
                 type="text"
-                placeholder="John Deo"
+                placeholder="Vikash Kumar"
                 name="name"
                 required
                 className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-teal-400 outline-none"

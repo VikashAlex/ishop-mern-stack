@@ -111,7 +111,43 @@ const orderController = {
             console.log(error)
             return res.status(400).json({ msg: "Please enter a valid order ID....", success: false });
         }
+    },
+    async getAllOrder(req, res) {
+    try {
+        const { id } = req.params;
+        if (!id) {
+            return res.status(404).json({ msg: "Id not exist...", success: false });
+        }
+
+        const orders = await orderModel
+            .find({ user_id: id })
+            .populate({
+                path: 'product_Details.product_id',
+                select: 'name',
+            });
+
+        const formattedOrders = orders.map(order => ({
+            ...order.toObject(),
+            createdAt: new Date(order.createdAt).toLocaleDateString('en-IN', {
+                day: '2-digit',
+                month: 'short',
+                year: 'numeric',
+            }),
+        }));
+
+      
+        return res.status(200).json({
+            success: true,
+            msg: "Order fetched successfully",
+            order: formattedOrders,
+        });
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ msg: "Internal Server Error...", success: false });
     }
+}
+
 };
 
 module.exports = orderController;

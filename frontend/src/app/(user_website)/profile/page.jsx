@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
 import { FaUserLock } from "react-icons/fa"
@@ -17,9 +17,22 @@ import { emptyCart } from "@/app/redux/features/cartSlice";
 function Page() {
   const router = useRouter()
   const [toggle, setToggle] = useState('account');
+  const [userOrder, setUserOrder] = useState([])
   const [add, setAdd] = useState(false)
   const dispatcher = useDispatch()
   const user = useSelector((state) => state.user)
+
+  const getOrder = async (api) => {
+    const orders = await Axiosinstance.get(`order/order-get/${api}`);
+    const data = await orders.data
+    setUserOrder(data)
+  }
+
+  useEffect(() => {
+    if (user?.userDetails?._id!=null) {
+      getOrder(user?.userDetails?._id)
+    }
+  }, [user])
 
 
   const Buttons = ({ tab, flag }) => {
@@ -242,22 +255,22 @@ function Page() {
                     <div>
                       <h2 className="text-2xl font-semibold mb-6">My Orders</h2>
                       <div className="space-y-4">
-                        <div className="border rounded-lg p-4 shadow-sm">
-                          <div className="flex justify-between items-center mb-2">
-                            <h3 className="font-medium text-gray-800">Order #12345</h3>
-                            <span className="text-sm text-teal-600">Delivered</span>
-                          </div>
-                          <p className="text-sm text-gray-600">2x T-shirt, 1x Shoes</p>
-                          <p className="text-sm text-gray-500 mt-1">Placed on: 12 Sept 2025</p>
-                        </div>
-                        <div className="border rounded-lg p-4 shadow-sm">
-                          <div className="flex justify-between items-center mb-2">
-                            <h3 className="font-medium text-gray-800">Order #12346</h3>
-                            <span className="text-sm text-yellow-600">Processing</span>
-                          </div>
-                          <p className="text-sm text-gray-600">1x Jacket</p>
-                          <p className="text-sm text-gray-500 mt-1">Placed on: 10 Sept 2025</p>
-                        </div>
+
+                        {
+                          userOrder.order?.map((item, index) => {
+                            return (
+                              <div key={index} className="border rounded-lg p-4 shadow-sm">
+                                <div className="flex justify-between items-center mb-2">
+                                  <h3 className="font-medium text-gray-800">Order  #{item._id}</h3>
+                                  <span className="text-sm text-teal-600">Delivered</span>
+                                </div>
+                                <p className="text-sm text-gray-600">{item?.product_Details[0]?.product_id?.name}</p>
+                                <p className="text-sm text-gray-500 mt-1">Placed on: {item?.createdAt}</p>
+                              </div>
+                            )
+                          })
+                        }
+
                       </div>
                     </div>
                     :

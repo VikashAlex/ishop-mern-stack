@@ -1,9 +1,24 @@
+'use client'
+
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 function Search() {
+  const [category, setCatgory] = useState();
+  const router = useRouter()
+  const sumithandler = () => {
+    if (category) {
+      router.push(`/store/${category}`)
+    } else {
+
+      alert("Enter The Name...")
+    }
+  }
+
   return (
     <div className="bg-[#01A49E]  py-2">
       <div className="flex flex-col md:flex-row items-center justify-between text-white px-4 gap-y-3 md:gap-x-5">
-        
+
         {/* Search Box */}
         <div className="flex w-full md:flex-1 rounded-[30px] overflow-hidden">
           <label
@@ -37,6 +52,7 @@ function Search() {
           <div className="relative w-full">
             <input
               type="search"
+              onChange={(e) => setCatgory(e.target.value)}
               id="search-dropdown"
               className="block p-2.5 w-full z-20 text-sm outline-0 text-gray-900 bg-gray-50 rounded-e-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
               placeholder="Search anything..."
@@ -44,6 +60,7 @@ function Search() {
             />
             <button
               type="submit"
+              onClick={sumithandler}
               className="absolute top-0 end-0 p-2.5 text-sm font-medium h-full text-white bg-blue-700 rounded-e-lg border border-blue-700 hover:bg-blue-800"
             >
               <svg
@@ -66,7 +83,7 @@ function Search() {
         </div>
 
         {/* Extra Info */}
-        <div className="flex flex-col md:flex-row justify-between w-full md:w-auto px-2 md:px-5 uppercase text-[12px] text-center md:text-left gap-y-1 md:gap-x-5">
+        <div className="flex  md:flex-row justify-between w-full md:w-auto px-2 md:px-5 uppercase md:text-[12px] text-[10px]  text-center md:text-left gap-y-1 md:gap-x-5">
           <div>free shipping over $199</div>
           <div>30 days money back</div>
           <div>100% secure payment</div>

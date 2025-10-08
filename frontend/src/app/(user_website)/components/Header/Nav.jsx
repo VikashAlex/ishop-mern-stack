@@ -3,16 +3,17 @@ import React, { useEffect, useState } from "react";
 import Logo from "./Logo";
 import Link from "next/link";
 import { CiHeart } from "react-icons/ci";
-import TopPart from "./TopPart";
+
 import { FaBars, FaTimes } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
-import { lsCartItem } from "@/app/redux/features/cartSlice";
+import { emptyCart, lsCartItem } from "@/app/redux/features/cartSlice";
 import { ShoppingCart } from "lucide-react";
-import { lsUserData } from "@/app/redux/features/userSlice";
+import { lsUserData, signOut } from "@/app/redux/features/userSlice";
+import { toast } from "react-toastify";
 
 const Links = [
   { path: "/", name: "Home" },
-  { path: "/pages", name: "Pages" },
+  { path: "/about", name: "About" },
   { path: "/store", name: "Store" },
   { path: "/contact", name: "Contact" },
   { path: "/profile", name: "My Profile" },
@@ -20,7 +21,7 @@ const Links = [
 
 function Nav() {
   const cartitems = useSelector((state) => state.cart);
-  const user = useSelector((state)=>state.user.userDetails)
+  const user = useSelector((state) => state.user.userDetails)
   const [open, setOpen] = useState(false);
   const dispatcher = useDispatch()
   const { items, finalPrice_Total } = cartitems;
@@ -29,10 +30,17 @@ function Nav() {
     dispatcher(lsUserData())
   }, [dispatcher])
 
-  
+  const longout = () => {
+    dispatcher(emptyCart())
+    dispatcher(signOut())
+    toast.success("Sign out Successful...");
+    setOpen(false)
+  }
+
+
   return (
     <div className="p-4 bg-white flex flex-col gap-y-8 pb-6  relative z-50">
-      <TopPart />
+
 
       {/* Navbar */}
       <nav className="flex justify-between items-center">
@@ -68,12 +76,12 @@ function Nav() {
             <p>welcome</p>
             {
               user
-              ?
-              <h1 className="font-bold text-center">{user.name}</h1>
-              :
-              <Link href={'/user-login?rfe=/'}>
-              <h1 className="font-bold">log in / Register</h1>
-              </Link>
+                ?
+                <h1 className="font-bold text-center">{user.name}</h1>
+                :
+                <Link href={'/user-login?rfe=/'}>
+                  <h1 className="font-bold">log in / Register</h1>
+                </Link>
             }
           </div>
 
@@ -127,6 +135,19 @@ function Nav() {
           </button>
         </div>
 
+        <div className="flex flex-col text-[12px] justify-center items-center uppercase gap-y-0">
+          <p>welcome</p>
+          {
+            user
+              ?
+              <h1 className="font-bold ">{user.name}</h1>
+              :
+              <Link href={'/user-login?rfe=/'}>
+                <h1 className="font-bold">log in / Register</h1>
+              </Link>
+          }
+        </div>
+
         {/* Nav Links */}
         <div className="flex flex-col gap-y-4">
           {Links.map((link, index) => (
@@ -140,30 +161,50 @@ function Nav() {
             </Link>
           ))}
         </div>
+        <Link 
+        onClick={() => setOpen(false)}
+        href={"/cart"}>
+          <div className="flex items-center gap-x-3 bg-white   py-2   transition duration-300 cursor-pointer">
+            {/* Cart Icon + Badge */}
+            <div className="relative">
+              <ShoppingCart className="w-6 h-6 text-[#1ABA1A]" />
+              {items.length > 0 && (
+                <span className="absolute -top-2 -right-2 bg-[#1ABA1A] text-white text-[10px] font-bold rounded-full px-1.5 py-0.5 shadow">
+                  {items.length}
+                </span>
+              )}
+            </div>
 
-        {/* User + Cart (Mobile) */}
-        <div className="mt-auto">
-          <div className="flex gap-x-3 items-center mb-4">
-            <button className="w-7 h-7 rounded-full bg-[#EBEEF6]"></button>
-            <button className="w-7 h-7 rounded-full bg-[#EBEEF6] flex justify-center items-center">
-              <CiHeart />
-            </button>
-            <button className="w-7 h-7 rounded-full bg-[#EBEEF6]"></button>
-          </div>
-
-          <div className="flex flex-col text-[12px] uppercase mb-4">
-            <p>welcome</p>
-            <h1 className="font-bold">log in / Register</h1>
-          </div>
-
-          <div className="flex gap-x-3 items-center">
-            <button className="w-7 h-7 rounded-full bg-[#EBEEF6]"></button>
-            <div className="flex flex-col text-[12px] uppercase">
-              <p>cart</p>
-              <h1 className="font-bold">$1,689.00</h1>
+            {/* Cart Info */}
+            <div className="flex gap-x-5 text-[12px] uppercase leading-tight">
+              <span className="text-gray-500">Cart</span>
+              <span className="font-bold text-gray-800">${finalPrice_Total || 0}</span>
             </div>
           </div>
+        </Link>
+        <div className="flex justify-start my-2">
+          {
+            user ?
+              <button
+                onClick={longout}
+                className="rounded-md px-3.5 py-2 m-1 overflow-hidden relative group cursor-pointer border-2 font-medium border-teal-500 ">
+                <span className="absolute w-64 h-0 transition-all duration-300 origin-center rotate-45 -translate-x-20 bg-teal-500 top-1/2 group-hover:h-64 group-hover:-translate-y-32 ease"></span>
+                <span className="relative text-teal-500 transition duration-300 group-hover:text-white ease">Sign out</span>
+              </button>
+              :
+              <Link href={'/user-login'}
+              onClick={() => setOpen(false)}
+              >
+              <button
+                className="rounded-md px-3.5 py-2 m-1 overflow-hidden relative group cursor-pointer border-2 font-medium border-teal-500 ">
+                <span className="absolute w-64 h-0 transition-all duration-300 origin-center rotate-45 -translate-x-20 bg-teal-500 top-1/2 group-hover:h-64 group-hover:-translate-y-32 ease"></span>
+                <span className="relative text-teal-500 transition duration-300 group-hover:text-white ease">Login</span>
+              </button>
+              </Link>
+          }
         </div>
+
+
       </div>
     </div>
   );

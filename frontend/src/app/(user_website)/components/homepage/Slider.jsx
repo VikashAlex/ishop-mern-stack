@@ -19,13 +19,13 @@ function Slider({img1,img2,img3}) {
             >
 
                 <SwiperSlide>
-                    <div className={`rounded-[10px] ${img1} bg-cover bg-center h-[160px] `}></div>
+                    <div className={`rounded-[10px] ${img1} bg-cover bg-center h-[300px] md:h-[160px] `}></div>
                 </SwiperSlide>
                 <SwiperSlide>
-                    <div className={`rounded-[10px] ${img2} bg-cover bg-center h-[160px] `}></div>
+                    <div className={`rounded-[10px] ${img2} bg-cover bg-center h-[300px] md:h-[160px] `}></div>
                 </SwiperSlide>
                 <SwiperSlide>
-                    <div className={`rounded-[10px] ${img3} bg-cover bg-center h-[160px] `}></div>
+                    <div className={`rounded-[10px] ${img3} bg-cover bg-center h-[300px] md:h-[160px] `}></div>
                 </SwiperSlide>
             </Swiper>
         </div>
