@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
-import { FaUserLock } from "react-icons/fa"
+import { FaBox, FaHome, FaLock, FaUser, FaUserLock } from "react-icons/fa"
 import { Axiosinstance } from "@/app/utils/helper";
 import { toast } from "react-toastify";
 import { addTouser, signOut } from "@/app/redux/features/userSlice";
@@ -29,7 +29,7 @@ function Page() {
   }
 
   useEffect(() => {
-    if (user?.userDetails?._id!=null) {
+    if (user?.userDetails?._id != null) {
       getOrder(user?.userDetails?._id)
     }
   }, [user])
@@ -129,50 +129,103 @@ function Page() {
 
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-6">
-      <div className="bg-white shadow-lg rounded-xl flex w-full max-w-7xl">
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-3 sm:p-6">
+      <div className="bg-white shadow-lg rounded-xl flex flex-col md:flex-row w-full max-w-7xl overflow-hidden">
 
-        {/* Left Sidebar */}
-        <div className="w-1/3 border-r border-gray-300 p-6 flex flex-col items-center">
+        {/* 🟩 Mobile Header (only visible on mobile) */}
+        <div className="md:hidden flex items-center justify-between bg-gradient-to-r from-teal-500 to-blue-600 text-white p-4 rounded-t-xl">
+          <div className="flex items-center gap-3">
+            {user ? (
+              <img
+                src="https://vikashalwar.vercel.app/_next/image?url=%2Fhero%2Fdeveloper.png&w=1920&q=75"
+                alt="Profile"
+                className="w-10 h-10 rounded-full object-cover border border-white"
+              />
+            ) : (
+              <FaUserLock className="text-3xl" />
+            )}
+            <div>
+              <h2 className="text-sm font-semibold leading-tight">
+                {user?.userDetails?.name || "Guest User"}
+              </h2>
+              <p className="text-xs opacity-80">{user?.userDetails?.email || "Login Required"}</p>
+            </div>
+          </div>
+          {user?.userDetails ? (
+            <button
+              onClick={longout}
+              className="bg-white text-teal-600 px-3 py-1 text-xs rounded-full font-medium hover:bg-gray-100"
+            >
+              Logout
+            </button>
+          )
+            :
+           ( <Link href={'/user-login'}>
+              <button
+                className="bg-white text-teal-600 px-3 py-1 text-xs rounded-full font-medium hover:bg-gray-100"
+              >
+                Login
+              </button>
+            </Link>)
+          }
+        </div>
+
+        {/* 🟨 Left Sidebar (desktop only) */}
+        <div className="hidden md:flex md:w-1/3 border-r border-gray-300 p-6 flex-col items-center">
           <div className="w-32 h-32 rounded-full overflow-hidden bg-gray-200 mb-4 flex justify-center items-center">
-            {
-              user ?
-                <img
-                  src="https://vikashalwar.vercel.app/_next/image?url=%2Fhero%2Fdeveloper.png&w=1920&q=75"
-                  alt="Profile"
-                  className="w-full h-full object-cover"
-                />
-                :
-                <FaUserLock className="text-blue-600 text-7xl drop-shadow-lg" />
-            }
-
+            {user ? (
+              <img
+                src="https://vikashalwar.vercel.app/_next/image?url=%2Fhero%2Fdeveloper.png&w=1920&q=75"
+                alt="Profile"
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <FaUserLock className="text-blue-600 text-7xl drop-shadow-lg" />
+            )}
           </div>
 
-          {
-            user?.userDetails ?
-              <>
-                <h2 className="text-xl font-semibold text-gray-800">{user?.userDetails?.name || 'user no found'}</h2>
-                <p className="text-sm text-gray-500 mb-6">{user?.userDetails?.email || 'email not found.'}</p>
-              </>
-              :
-              <h2 className="text-xl font-bold text-gray-800 mb-3">
-                Login Required
+          {user?.userDetails ? (
+            <>
+              <h2 className="text-xl font-semibold text-gray-800">
+                {user?.userDetails?.name || "User Not Found"}
               </h2>
-          }
-
+              <p className="text-sm text-gray-500 mb-6">{user?.userDetails?.email}</p>
+            </>
+          ) : (
+            <h2 className="text-xl font-bold text-gray-800 mb-3">Login Required</h2>
+          )}
 
           <div className="space-y-3 w-full">
-            <Buttons tab={'Account info'} flag={'account'} />
-            <Buttons tab={'My order'} flag={'order'} />
-            <Buttons tab={'My address'} flag={'address'} />
-            <Buttons tab={'Change password'} flag={'password'} />
+            <Buttons tab={"Account info"} flag={"account"} />
+            <Buttons tab={"My order"} flag={"order"} />
+            <Buttons tab={"My address"} flag={"address"} />
+            <Buttons tab={"Change password"} flag={"password"} />
           </div>
         </div>
 
-        {/* Right Section */}
-        <div className="w-2/3 p-8">
-          <AnimatePresence mode="wait">
+        {/* 🟦 Mobile Bottom Navbar */}
+        <div className="fixed bottom-0 left-0 right-0  shadow-md border-t border-gray-200 md:hidden flex justify-around py-2 z-50 bg-gradient-to-r from-teal-500 to-blue-600 ">
+          <button onClick={() => setToggle("account")} className={`flex flex-col items-center text-xs ${toggle === "account" ? "text-teal-600" : "text-white"}`}>
+            <FaUser className="text-lg mb-1" />
+            Account
+          </button>
+          <button onClick={() => setToggle("order")} className={`flex flex-col items-center text-xs ${toggle === "order" ? "text-black" : "text-white"}`}>
+            <FaBox className="text-lg mb-1" />
+            Orders
+          </button>
+          <button onClick={() => setToggle("address")} className={`flex flex-col items-center text-xs ${toggle === "address" ? "text-black" : "text-white"}`}>
+            <FaHome className="text-lg mb-1" />
+            Address
+          </button>
+          <button onClick={() => setToggle("password")} className={`flex flex-col items-center text-xs ${toggle === "password" ? "text-black" : "text-white"}`}>
+            <FaLock className="text-lg mb-1" />
+            Password
+          </button>
+        </div>
 
+        {/* 🟪 Right Section (Content Area) */}
+        <div className="w-full md:w-2/3 p-4 sm:p-6 md:p-8 mt-2 md:mt-0 mb-14 md:mb-0">
+          <AnimatePresence mode="wait">
             {toggle === 'account' && (
               <motion.div
                 key="account"
@@ -563,10 +616,12 @@ function Page() {
               </motion.div>
 
             )}
+
           </AnimatePresence>
         </div>
       </div>
     </div>
+
   );
 }
 
