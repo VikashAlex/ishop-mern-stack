@@ -4,7 +4,7 @@ import { PlusCircle } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useRef } from "react";
-import {  toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 
 function page() {
@@ -25,9 +25,9 @@ function page() {
     formData.append("slug", slug);
     formData.append("status", status);
     formData.append("image", image);
-    Axiosinstance.post("category/create", formData , {
-      headers:{
-        Authorization:token
+    Axiosinstance.post("category/create", formData, {
+      headers: {
+        Authorization: token
       }
     }).then((res) => {
       if (res.status == 201) {
@@ -51,13 +51,24 @@ function page() {
   };
 
   return (
-    <div className="flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200 p-6 w-full">
-      <div className="w-full  bg-white rounded-2xl shadow-xl p-8">
-        <div className="flex items-center gap-2 mb-6">
-          <PlusCircle className="w-6 h-6 text-blue-600" />
-          <h1 className="text-2xl font-bold text-gray-800">Add New Category</h1>
+    <div className="flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200 min-h-screen p-4 sm:p-6 w-full">
+      <div className="w-full max-w-3xl bg-white rounded-2xl shadow-xl p-6 sm:p-8">
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-6">
+          <div className="flex items-center gap-2">
+            <PlusCircle className="w-6 h-6 text-blue-600" />
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-800">
+              Add New Category
+            </h1>
+          </div>
+          <Link href="/admin/category">
+            <button className="cursor-pointer px-4 py-2 rounded-lg border border-gray-300 text-sm sm:text-base hover:bg-gray-100 transition">
+              Back
+            </button>
+          </Link>
         </div>
 
+        {/* Form */}
         <form className="space-y-5" onSubmit={formHandler}>
           {/* Category Name */}
           <div>
@@ -70,7 +81,7 @@ function page() {
               ref={nameRfe}
               onChange={createSlug}
               placeholder="Enter category name"
-              className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+              className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition text-sm sm:text-base"
             />
           </div>
 
@@ -83,8 +94,8 @@ function page() {
               type="text"
               ref={slugRfe}
               required
-              placeholder="auto-generated or enter manually"
-              className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+              placeholder="Auto-generated or enter manually"
+              className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition text-sm sm:text-base"
             />
           </div>
 
@@ -93,15 +104,14 @@ function page() {
             <label className="block text-sm font-medium text-gray-600 mb-1">
               Category Image
             </label>
-
             <label
               htmlFor="categoryImage"
-              className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition"
+              className="flex flex-col items-center justify-center w-full h-36 sm:h-40 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition text-center px-3"
             >
               <span className="text-gray-600 text-sm font-medium">
-                Click to upload or drag & drop
+                Tap to upload or drag & drop
               </span>
-              <span className="text-xs text-gray-400">PNG, JPG up to 2MB</span>
+              <span className="text-xs text-gray-400 mt-1">PNG, JPG up to 2MB</span>
               <input
                 id="categoryImage"
                 type="file"
@@ -113,7 +123,6 @@ function page() {
             </label>
           </div>
 
-
           {/* Status */}
           <div className="flex items-center gap-3">
             <label className="text-sm font-medium text-gray-600">
@@ -121,24 +130,24 @@ function page() {
             </label>
             <input
               type="checkbox"
-              className="toggle toggle-primary"
+              className="toggle toggle-primary scale-90 sm:scale-100"
               ref={statusRfe}
             />
           </div>
 
           {/* Buttons */}
-          <div className="flex justify-end gap-3 pt-4">
+          <div className="flex flex-col sm:flex-row justify-end gap-3 pt-4">
             <Link href="/admin/category">
               <button
                 type="button"
-                className="cursor-pointer px-5 py-2 rounded-lg border border-gray-300 hover:bg-gray-100 transition"
+                className="cursor-pointer px-5 py-2 rounded-lg border border-gray-300 hover:bg-gray-100 transition w-full sm:w-auto"
               >
                 Cancel
               </button>
             </Link>
             <button
               type="submit"
-              className="cursor-pointer px-5 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg shadow-md hover:shadow-lg transition"
+              className="cursor-pointer px-5 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg shadow-md hover:shadow-lg transition w-full sm:w-auto"
             >
               Save Category
             </button>
@@ -146,6 +155,7 @@ function page() {
         </form>
       </div>
     </div>
+
 
   );
 }

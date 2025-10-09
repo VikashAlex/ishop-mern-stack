@@ -1,5 +1,5 @@
 "use client";
-import { Edit, Trash2, Star, ShieldCheck, Truck, Sparkles, Plus, X } from "lucide-react";
+import { Edit, Trash2, Star, ShieldCheck, Truck, Sparkles, Plus, X, Eye } from "lucide-react";
 import Link from "next/link";
 import { getProduct } from "../../../../../library/api_calls";
 import { useEffect, useState } from "react";
@@ -61,147 +61,168 @@ export default function ProductPage() {
   }
 
   return (
-    <div className="p-8 w-full bg-gray-50 min-h-screen relative overflow-hidden">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold text-gray-800">Product</h1>
+    <div className="p-4 sm:p-6 md:p-8 w-full bg-gray-50 min-h-screen relative">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">Products</h1>
         <Link href="/admin/product/add">
-          <button className="flex cursor-pointer items-center gap-2 px-5 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl shadow-md hover:shadow-lg transition">
+          <button className="flex items-center justify-center gap-2 w-full sm:w-auto px-5 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl shadow-md hover:shadow-lg transition text-sm sm:text-base">
             <Plus className="w-5 h-5" /> Add Product
           </button>
         </Link>
       </div>
 
-      <div className="overflow-hidden rounded-2xl shadow-md bg-white ">
-        {product.length == 0 ? (
-          <div className="w-full h-[70vh] flex items-center justify-center">
-            <div className="relative w-full max-w-xl rounded-2xl border border-dashed border-gray-300 bg-white p-8 text-center shadow-sm">
+      {/* Empty State */}
+      {product.length === 0 ? (
+        <div className="flex items-center justify-center h-[70vh]">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="relative w-full max-w-md rounded-2xl border border-dashed border-gray-300 bg-white p-8 text-center shadow-sm"
+          >
+            <motion.div
+              className="absolute inset-0 -z-10 rounded-2xl bg-gradient-to-br from-blue-50 to-indigo-50"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.6 }}
+            />
+            <TbCategory2 className="mx-auto text-blue-500 h-12 w-12 mb-4" />
+            <h3 className="text-xl font-semibold text-gray-800">No Products Found</h3>
+            <p className="mt-1 text-sm text-gray-500">
+              You haven’t added any products yet. Start by adding one below.
+            </p>
+            <motion.button
+              className="mt-5 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-5 py-2.5 text-white shadow-md hover:shadow-lg"
+              whileHover={{ y: -2 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <Link href="/admin/product/add">+ Add Product</Link>
+            </motion.button>
+          </motion.div>
+        </div>
+      ) : (
+        <>
+          {/* 📱 Mobile View (Card layout) */}
+          <div className="grid grid-cols-1 sm:hidden gap-4">
+            {product.map((p, index) => (
               <motion.div
-                className="absolute -z-10 inset-0 rounded-2xl bg-gradient-to-br from-blue-50 to-indigo-50"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.6 }}
-              />
-
-              <motion.div
-                className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-blue-100"
-                initial={{ scale: 0.8, rotate: -10, opacity: 0 }}
-                animate={{ scale: 1, rotate: 0, opacity: 1 }}
-                transition={{ type: "spring", stiffness: 200, damping: 12 }}
+                key={p._id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+                className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4"
               >
-                <motion.span
-                  animate={{ y: [0, -6, 0] }}
-                  transition={{
-                    repeat: Infinity,
-                    duration: 2,
-                    ease: "easeInOut",
-                  }}
-                >
-                  <TbCategory2 className="h-8 w-8 text-blue-600" />
-                </motion.span>
+                <div className="flex items-center gap-3">
+                  <img
+                    src={`${process.env.NEXT_PUBLIC_API_BASE_URL}images/product/${p.thumbnail}`}
+                    alt={p.name}
+                    className="w-16 h-16 object-cover rounded-lg"
+                  />
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-gray-800">{p.name}</h3>
+                    <p className="text-xs text-gray-500">{p.slug}</p>
+                  </div>
+                </div>
+
+                <div className="mt-3 flex flex-wrap gap-2">
+                  <ProductBtn product={p} flag={flag} setFlag={setFlag} />
+                </div>
+
+                <div className="mt-4 flex flex-wrap justify-between gap-2">
+                  <button
+                    onClick={() => deleteProduct(p._id)}
+                    className="flex-1 flex items-center justify-center gap-1 px-3 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 text-xs"
+                  >
+                    <Trash2 className="w-4 h-4" /> Delete
+                  </button>
+                  <Link href={`/admin/product/edit/${p._id}`} className="flex-1">
+                    <button className="w-full flex items-center justify-center gap-1 px-3 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 text-xs">
+                      <Edit className="w-4 h-4" /> Edit
+                    </button>
+                  </Link>
+                  <button
+                    onClick={() => toggle(p)}
+                    className="flex-1 flex items-center justify-center gap-1 px-3 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 text-xs"
+                  >
+                    <Eye className="w-4 h-4" /> View
+                  </button>
+                </div>
               </motion.div>
-
-              <h3 className="text-xl font-semibold text-gray-800">
-                Product not available
-              </h3>
-              <p className="mt-1 text-sm text-gray-500">
-                No Product has been created yet. Start by adding a new
-                Product.
-              </p>
-
-              <motion.button
-                className="mt-5 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-5 py-2.5 text-white shadow-md hover:shadow-lg"
-                whileHover={{ y: -2 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <Link href="/admin/product/add">+ Add Product</Link>
-              </motion.button>
-              <motion.div
-                className="absolute right-6 top-6 h-2 w-2 rounded-full bg-blue-500"
-                animate={{ scale: [1, 1.6, 1], opacity: [1, 0.4, 1] }}
-                transition={{ repeat: Infinity, duration: 1.8 }}
-              />
-              <motion.div
-                className="absolute left-8 bottom-6 h-2 w-2 rounded-full bg-indigo-500"
-                animate={{ y: [0, -8, 0], opacity: [0.7, 1, 0.7] }}
-                transition={{ repeat: Infinity, duration: 2.2 }}
-              />
-            </div>
+            ))}
           </div>
-        ) : (
-          <table className="w-full text-sm text-left text-gray-600">
-            <thead className="bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 uppercase text-xs font-semibold">
-              <tr>
-                <th className="px-6 py-3">ID</th>
-                <th className="px-6 py-3">Thumbnail</th>
-                <th className="px-6 py-3">Name</th>
-                <th className="px-6 py-3">Product</th>
-                <th className="px-6 py-3 text-center">Satus</th>
-                <th className="px-6 py-3 text-center">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {product.map((product, index) => (
-                <tr
-                  key={index + 1}
-                  className="border-b hover:bg-gray-50 transition duration-200"
-                >
-                  <td className="px-6 py-4 font-medium">{index + 1}</td>
-                  <td className="px-6 py-4">
-                    <img
-                      className="w-[30px]"
-                      src={`${process.env.NEXT_PUBLIC_API_BASE_URL}images/product/${product.thumbnail}`} alt={product.thumbnail} />
-                  </td>
-                  <td className="px-6 py-4">{product.name}</td>
-                  <td className="px-6 py-4">{product.slug}</td>
-                  <td className="px-6 py-4">
-                    <ProductBtn product={product} flag={flag} setFlag={setFlag} />
-                  </td>
 
-                  <td className="px-6 py-4 flex items-center justify-center gap-2">
-
-
-                    <button
-                      onClick={() => deleteProduct(product._id)}
-                      className="flex items-center gap-1 px-3 py-1.5 cursor-pointer bg-red-500 text-white rounded-lg hover:bg-red-600 transition text-xs"
-                    >
-                      <Trash2 className="w-4 h-4" /> Delete
-                    </button>
-
-
-                    <Link href={`/admin/product/edit/${product._id}`}>
-                      <button className="flex items-center cursor-pointer gap-1 px-3 py-1.5 bg-green-500 text-white rounded-lg hover:bg-green-600 transition text-xs">
-                        <Edit className="w-4 h-4" /> Edit
-                      </button>
-                    </Link>
-
-                    <button
-                      onClick={() => toggle(product)}
-                      className="flex items-center gap-1 cursor-pointer px-3 py-1.5 bg-green-500 text-white rounded-lg hover:bg-green-600 transition text-xs">
-                      <Edit className="w-4 h-4" /> Views
-                    </button>
-
-                    <AnimatePresence>
-                      {viweflag && (
-                        <motion.section
-                          initial={{ opacity: 0, x: "-100%" }}
-                          animate={{ opacity: 1, x: 0 }}
-                          exit={{ opacity: 0, x: "-100%" }}
-                          transition={{ duration: 0.4, ease: "easeInOut" }}
-                          className="absolute top-0 left-0 h-full w-full  shadow-2xl  rounded-2xl bg-red-300"
-                        >
-                          <ViwesCompo PRODUCT={toggleId} setViweflag={setViweflag} />
-                        </motion.section>
-                      )
-                      }
-                    </AnimatePresence >
-                  </td>
+          {/* 💻 Desktop View (Table layout) */}
+          <div className="hidden sm:block overflow-x-auto rounded-2xl shadow-md bg-white">
+            <table className="min-w-[800px] w-full text-sm text-left text-gray-600">
+              <thead className="bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 uppercase text-xs font-semibold">
+                <tr>
+                  <th className="px-6 py-3">ID</th>
+                  <th className="px-6 py-3">Thumbnail</th>
+                  <th className="px-6 py-3">Name</th>
+                  <th className="px-6 py-3">Product</th>
+                  <th className="px-6 py-3 text-center">Status</th>
+                  <th className="px-6 py-3 text-center">Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-      </div>
+              </thead>
+              <tbody>
+                {product.map((p, index) => (
+                  <tr key={index + 1} className="border-b hover:bg-gray-50 transition duration-200">
+                    <td className="px-6 py-4 font-medium">{index + 1}</td>
+                    <td className="px-6 py-4">
+                      <img
+                        className="w-[40px] h-[40px] rounded-md object-cover"
+                        src={`${process.env.NEXT_PUBLIC_API_BASE_URL}images/product/${p.thumbnail}`}
+                        alt={p.thumbnail}
+                      />
+                    </td>
+                    <td className="px-6 py-4">{p.name}</td>
+                    <td className="px-6 py-4">{p.slug}</td>
+                    <td className="px-6 py-4 text-center">
+                      <ProductBtn product={p} flag={flag} setFlag={setFlag} />
+                    </td>
+                    <td className="px-6 py-4 flex justify-center gap-2">
+                      <button
+                        onClick={() => deleteProduct(p._id)}
+                        className="flex items-center gap-1 px-3 py-1.5 bg-red-500 text-white rounded-lg hover:bg-red-600 transition text-xs"
+                      >
+                        <Trash2 className="w-4 h-4" /> Delete
+                      </button>
+                      <Link href={`/admin/product/edit/${p._id}`}>
+                        <button className="flex items-center gap-1 px-3 py-1.5 bg-green-500 text-white rounded-lg hover:bg-green-600 transition text-xs">
+                          <Edit className="w-4 h-4" /> Edit
+                        </button>
+                      </Link>
+                      <button
+                        onClick={() => toggle(p)}
+                        className="flex items-center gap-1 px-3 py-1.5 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition text-xs"
+                      >
+                        <Eye className="w-4 h-4" /> View
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <AnimatePresence>
+            {viweflag && (
+              <motion.section
+                initial={{ opacity: 0, x: "-100%" }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: "-100%" }}
+                transition={{ duration: 0.4, ease: "easeInOut" }}
+                className="absolute inset-0 overflow-y-auto shadow-2xl rounded-2xl bg-white z-50"
+              >
+                <ViwesCompo PRODUCT={toggleId} setViweflag={setViweflag} />
+              </motion.section>
+            )}
+          </AnimatePresence>
+        </>
+      )}
     </div>
+
+
   );
 }
 
@@ -210,7 +231,7 @@ export default function ProductPage() {
 const ViwesCompo = ({ setViweflag, PRODUCT }) => {
   console.log(PRODUCT)
   return (
-    <div className="min-h-screen  bg-gradient-to-b from-white to-slate-50 p-4 md:p-8">
+    <div className="h-[100%]  bg-gradient-to-b from-white to-slate-50 p-4 md:p-8">
       <div className="flex justify-end px-4 mb-3">
         <button
           onClick={() => setViweflag(false)}

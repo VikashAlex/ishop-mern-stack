@@ -127,13 +127,13 @@ function EditCompo({ id, setEditflag, setFlag, flag }) {
                         <button
                             onClick={() => setEditflag(false)}
                             type="button"
-                            className="px-5 py-2 rounded-lg border border-gray-300 hover:bg-gray-100 transition"
+                            className="px-5 py-2 text-[12px] md:text-sm rounded-lg border border-gray-300 hover:bg-gray-100 transition"
                         >
                             Cancel
                         </button>
                         <button
                             type="submit"
-                            className="px-5 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg shadow-md hover:shadow-lg transition"
+                            className="px-5 py-2 text-[12px] md:text-sm bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg shadow-md hover:shadow-lg transition"
                         >
                             Update Colors
                         </button>
