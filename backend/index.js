@@ -16,7 +16,7 @@ const server = express();
 mongoose.set('strictQuery', true);
 require('dotenv').config();
 server.use(express.json());
-server.use(cors({ origin: "http://localhost:3000", credentials: true}));
+server.use(cors());
 server.use(cookieParser())
 server.use('/category', categoryRoutes)
 server.use('/color', colorRoutes)
