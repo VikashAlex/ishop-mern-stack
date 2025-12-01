@@ -16,8 +16,16 @@ const server = express();
 mongoose.set('strictQuery', true);
 require('dotenv').config();
 server.use(express.json());
+const allowedOrigins = [
+  "https://vikashishop.vercel.app",
+  "http://localhost:3000"
+];
 server.use(cors({
-  origin: "https://ishop-mern-stack.vercel.app",
+  origin: function(origin, callback) {
+    if (!origin) return callback(null, true); 
+    if (allowedOrigins.includes(origin)) return callback(null, true);
+    callback(new Error('Not allowed by CORS'));
+  },
   credentials: true
 }));
 

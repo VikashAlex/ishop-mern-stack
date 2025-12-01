@@ -11,11 +11,11 @@ const adminController = {
                 id: admin._id,
                 email: admin.email
             }, process.env.SECRET_KEY_JWT, { expiresIn: '2d' });
-            res.cookie("admin_token",token , {
-                httpOnly: false,
-                secure: false,   
-                maxAge: 1000 * 60 * 60 * 24, 
-                sameSite: "lax" 
+            res.cookie("admin_token", token, {
+                httpOnly: true,                             
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
+                maxAge: 1000 * 60 * 60 * 24     
             });
             return res.status(201).json({ msg: "Admin  Login...", success: true, token })
         } catch (error) {
