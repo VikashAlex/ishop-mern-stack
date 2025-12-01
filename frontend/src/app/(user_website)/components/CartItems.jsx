@@ -157,19 +157,19 @@ function CartItems({ product }) {
                     <div className="flex justify-between">
                         <span>Original Price:</span>
                         <span className="font-medium">
-                            ${formatCurrencyINR(cart?.originalPrice_Total || 0)}
+                            {formatCurrencyINR(cart?.originalPrice_Total || 0)}
                         </span>
                     </div>
                     <div className="flex justify-between">
                         <span>Saving :</span>
                         <span className="font-medium text-[#1ABA1A]">
-                            ${formatCurrencyINR(cart?.originalPrice_Total - cart.finalPrice_Total || 0)}
+                            {formatCurrencyINR(cart?.originalPrice_Total - cart.finalPrice_Total || 0)}
                         </span>
                     </div>
                 </div>
                 <div className="flex justify-between font-bold text-lg mt-4 border-t pt-4">
                     <span>Final Price:</span>
-                    <span>${formatCurrencyINR(cart?.finalPrice_Total || 0)}</span>
+                    <span>{formatCurrencyINR(cart?.finalPrice_Total || 0)}</span>
                 </div>
 
                 <button

@@ -1,5 +1,6 @@
 'use client'
 
+import { formatCurrencyINR } from "@/app/utils/helper";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -84,7 +85,7 @@ function Search() {
 
         {/* Extra Info */}
         <div className="flex  md:flex-row justify-between w-full md:w-auto px-2 md:px-5 uppercase md:text-[12px] text-[10px]  text-center md:text-left gap-y-1 md:gap-x-5">
-          <div>free shipping over $199</div>
+          <div>free shipping over {formatCurrencyINR(199)}</div>
           <div>30 days money back</div>
           <div>100% secure payment</div>
         </div>

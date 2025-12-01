@@ -10,6 +10,7 @@ import { emptyCart, lsCartItem } from "@/app/redux/features/cartSlice";
 import { ShoppingCart } from "lucide-react";
 import { lsUserData, signOut } from "@/app/redux/features/userSlice";
 import { toast } from "react-toastify";
+import { formatCurrencyINR } from "@/app/utils/helper";
 
 const Links = [
   { path: "/", name: "Home" },
@@ -178,7 +179,7 @@ function Nav() {
             {/* Cart Info */}
             <div className="flex gap-x-5 text-[12px] uppercase leading-tight">
               <span className="text-gray-500">Cart</span>
-              <span className="font-bold text-gray-800">${finalPrice_Total || 0}</span>
+              <span className="font-bold text-gray-800">{formatCurrencyINR(finalPrice_Total) || 0}</span>
             </div>
           </div>
         </Link>
