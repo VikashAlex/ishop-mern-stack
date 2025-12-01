@@ -17,7 +17,7 @@ mongoose.set('strictQuery', true);
 require('dotenv').config();
 server.use(express.json());
 server.use(cors({
-  origin: "https://ishop-mern-stack.vercel.app",
+  origin: "https://vikashishop.vercel.app",
   credentials: true
 }));
 
