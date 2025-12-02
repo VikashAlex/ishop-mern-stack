@@ -19,10 +19,9 @@ export default function AdminLoginPage() {
 
     Axiosinstance.post("/admin/login", data, { withCredentials: true })
       .then((res) => {
+        console.log(res.data.status, res.data);
         toast.success(res.data.msg);
-        if (res.status === 201) {
-          setTimeout(() => router.push("/admin"), 2000);
-        }
+        setTimeout(() => router.push("/admin"), 2000);
       })
       .catch((error) => {
         toast.warning(error.response?.data?.msg || "Login failed!");
