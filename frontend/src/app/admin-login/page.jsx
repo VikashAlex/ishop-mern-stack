@@ -19,9 +19,11 @@ export default function AdminLoginPage() {
 
     Axiosinstance.post("/admin/login", data, { withCredentials: true })
       .then((res) => {
-        console.log(res.data.status, res.data);
+        if (res.data?.token) {
+          document.cookie = `admin_token=${res.data.token}; path=/; max-age=${60 * 60 * 24}`;
+        }
         toast.success(res.data.msg);
-        setTimeout(() => router.push("/admin"), 2000);
+        setTimeout(() => router.push("/admin"), 500);
       })
       .catch((error) => {
         toast.warning(error.response?.data?.msg || "Login failed!");
